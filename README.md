@@ -1,5 +1,5 @@
-<p align="center"> <img src="https://raw.githubusercontent.com/albanomp/Proyecto-Clinica-Veterinaria/main/BannerPetCare.png" width="850"> </p>
-🐾 Clínica Veterinaria “PetCare” – Sistema de Gestión
+https://github.com/albanomp/Proyecto-Clinica-Veterinaria/blob/main/Banner2.png?raw=true
+🐾 Clínica Veterinaria – Sistema de Gestión
 Proyecto Final – Desarrollo Backend con FastAPI
 🐶🐱 Descripción del proyecto
 
