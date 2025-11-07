@@ -1,4 +1,5 @@
-https://github.com/albanomp/Proyecto-Clinica-Veterinaria/blob/main/Banner2.png?raw=true
+<img width="1344" height="768" alt="image" src="https://github.com/user-attachments/assets/2eb3056f-47f6-4040-8e8a-7016e93e2c9d" />
+
 🐾 Clínica Veterinaria – Sistema de Gestión
 Proyecto Final – Desarrollo Backend con FastAPI
 🐶🐱 Descripción del proyecto
