@@ -70,34 +70,3 @@ def crear_dueño(dueño: Dueño):
         "mascota": mascota_dueño,
         "datos completos": dueño.model_dump()
     }
-
-libros = [
-       {"id": 1, "titulo": "El Quijote", "autor": "Cervantes"},
-       {"id": 2, "titulo": "Cien años de soledad", "autor": "García Márquez"},
-       {"id": 3, "titulo": "1984", "autor": "Orwell"}
-   ]
-
-@app.get("/libros/{libro_id}")
-def obtener_libro(libro_id: int):
-    for libro in libros:
-        if libro["id"] == libro_id:
-            return libro
-
-@app.delete("/citas/{cita_id}")
-def eli_libro(libro_id:int):
-    for i, libro in enumerate(libros):
-        if libro["id"] == libro_id:
-            libro_eliminado = libros.pop(i)
-            return {"mensaje": f"Libro {libro_eliminado["titulo"]} eliminado correctamente"}
-    raise HTTPException(status_code=404, detail="404 - Libro no encontrado")
-
-
-@app.get("/hora-actual")
-def obtener_hora():
-    ahora = datetime.now()
-    return {
-        "fecha": ahora.strftime("%Y-%m-%D"),
-        "hora": ahora.strftime("%H-%M-%S"),
-        "dia_semana": ahora.strftime("%A"),
-        "mes": ahora.strftime("%B"),
-    }
