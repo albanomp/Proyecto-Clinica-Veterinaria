@@ -47,8 +47,8 @@ class DuenoCreate(BaseModel):
     id: int
     nombre: str
     telefono: str
-    email: str | None
-    direccion: str | None
+    email: str | None = None
+    direccion: str | None = None
     
 
 class DuenoUpdate(BaseModel):
@@ -67,8 +67,8 @@ class DuenoPatch(BaseModel):
     id: int
     nombre: str
     telefono: str
-    email: str | None
-    direccion: str | None
+    email: str | None = None
+    direccion: str | None = None
     
 Base.metadata.create_all(engine)
 
