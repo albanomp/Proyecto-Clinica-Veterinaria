@@ -254,94 +254,132 @@ def create(cita_dto: CitaCreate, db: Session = Depends(get_db)):
     return cita # retorna la canción creada
 
 
-"""
+
 # PUT - actualizar COMPLETAMENTE una canción
-@app.put("/api/songs/{id}", response_model=SongResponse)
-def update_full(id: int, song_dto: SongUpdate, db: Session = Depends(get_db)):
+@app.put("/api/citas/{id}", response_model=CitaResponse)
+def update_full(id: int, cita_dto: CitaUpdate, db: Session = Depends(get_db)):
     # busca canción por id
-    song = db.execute(
-        select(Song).where(Song.id == id)
+    cita = db.execute(
+        select(Cita).where(Cita.id == id)
     ).scalar_one_or_none()
     
     # si no existe, devuelve 404
-    if not song:
+    if not cita:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"No se ha encontrado la canción con id {id}"
         )
-    
-    # validaciones (igual que en POST)
-    if not song_dto.title.strip():
+
+    # validaciones
+    if not cita_dto.fecha_hora:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="El artista de la canción no puede estar vacío"
+            detail="La fecha de la cita no puede estar vacío"
         )
-    
-    if not song_dto.artist.strip():
+
+    if not cita_dto.motivo.strip():
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="El artista de la canción no puede estar vacío"
+            detail="El motivo de la cita no puede estar vacío"
         )
     
-    if song_dto.duration_seconds is not None and song_dto.duration_seconds < 0:
+    if cita_dto.veterinario_id is None or cita_dto.veterinario_id <= 0:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="La duración debe ser un número positivo"
+            detail="El veterinario de la cita debe tener un identificador válido"
         )
     
-    song.title = song_dto.title.strip()
-    song.artist = song_dto.artist.strip()
-    song.duration_seconds = song_dto.duration_seconds
-    song.explicit = song_dto.explicit
+    if cita_dto.mascota_id is None or cita_dto.mascota_id <= 0:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="La mascota de la cita debe tener un identificador válido"
+        )
+    
+    cita.fecha_hora = cita_dto.fecha_hora
+    cita.motivo = cita_dto.motivo.strip()
+    cita.veterinario_id = cita_dto.veterinario_id
+    cita.mascota_id = cita_dto.mascota_id
+
     
     db.commit() # confirma los cambios
-    db.refresh(song) # refresca el objeto de la base de datos
-    return song # retorna la canción actualizada
+    db.refresh(cita) # refresca el objeto de la base de datos
+    return cita # retorna la canción actualizada
 
 # PATCH - actualizar PARCIALMENTE una canción
-@app.patch("/api/songs/{id}", response_model=SongResponse)
-def update_partial(id: int, song_dto: SongPatch, db: Session = Depends(get_db)):
+@app.patch("/api/citas/{id}", response_model=CitaResponse)
+def update_partial(id: int, cita_dto: CitaPatch, db: Session = Depends(get_db)):
     # busca canción por id
-    song = db.execute(
-        select(Song).where(Song.id == id)
+    cita = db.execute(
+        select(Cita).where(Cita.id == id)
     ).scalar_one_or_none()
     
     # si no existe, devuelve 404
-    if not song:
+    if not cita:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"No se ha encontrado la canción con id {id}"
+            detail=f"No se ha encontrado la cita con id {id}"
         )
     
     # actualiza SÓLO los campos que se han enviado (no son None)
-    if song_dto.title is not None:
-        if not song_dto.title.strip():
+    if cita_dto.fecha_hora is not None:
+        if not cita_dto.fecha_hora:
             raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="El título de la canción no puede estar vacío"
+            detail="La fecha de la cita no puede estar vacío"
         )
-        song.title = song_dto.title.strip()
-    
-    if song_dto.artist is not None:
-        if not song_dto.artist.strip():
+        cita.fecha_hora = cita_dto.fecha_hora
+
+    if cita_dto.motivo is not None:
+        if not cita_dto.motivo.strip():
             raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="El artista de la canción no puede estar vacío"
+            detail="El motivo de la cita no puede estar vacío"
         )
-        song.artist = song_dto.artist.strip()
-    
-    if song_dto.duration_seconds is not None:
-        if song_dto.duration_seconds < 0:
+        cita.motivo = cita_dto.motivo.strip()
+
+
+
+    if cita_dto.veterinario_id is not None:
+        if cita_dto.veterinario_id <= 0:
             raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="La duración debe ser un número positivo"
-            )
-        song.duration_seconds = song_dto.duration_seconds
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="El veterinario de la cita debe tener un identificador válido"
+        )
+        cita.veterinario_id = cita_dto.veterinario_id
+        
     
-    if song_dto.explicit is not None:
-        song.explicit = song_dto.explicit
+    if cita_dto.mascota_id is not None:
+        if cita_dto.mascota_id <= 0:
+            raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="La mascota de la cita debe tener un identificador válido"
+        )
+        cita.mascota_id = cita_dto.mascota_id
+    
+    # if cita_dto.explicit is not None:
+    #     cita.explicit = cita_dto.explicit
     
     db.commit() # confirma los cambios en base datos
-    db.refresh(song) # refresca el objeto
-    return song
-"""
+    db.refresh(cita) # refresca el objeto
+    return cita
+
+# DELETE - eliminar una cita
+@app.delete("/api/citas/{id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_by_id(id: int, db: Session = Depends(get_db)):
+    # busca la cita por id
+    cita = db.execute(
+        select(Cita).where(Cita.id == id)
+    ).scalar_one_or_none()
+    
+    # si no existe, devuelve 404
+    if not cita:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"No se ha encontrado la cita con id {id}"
+        )
+    
+    # elimina la cita de base de datos
+    db.delete(cita) # marca el objeto para eliminación
+    db.commit() # confirma la eliminación en base de datos
+    return None
+
