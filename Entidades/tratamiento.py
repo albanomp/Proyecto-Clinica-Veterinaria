@@ -50,12 +50,12 @@ def init_db():
         if existing:
             return
 
-        default_data = [
+        default_tr = [
             Tratamiento(
                 nombre="Vacuna antirrábica",
                 costo=45.0,
                 tipo="vacuna",
-                descripcion="Vacuna anual para protección múltiple.",
+                descripcion="Vacuna anual para protección de la rabia.",
                 duracion="1 año",
                 ingreso=False
             ),
@@ -71,13 +71,13 @@ def init_db():
                 nombre="Antibiótico en comprimidos",
                 costo=22.5,
                 tipo="medicamento",
-                descripcion="Antibiótico de amplio espectro.",
+                descripcion="Antibiótico de amplio espectro por herida infectada.",
                 duracion="7 días",
                 ingreso=False
             )
         ]
 
-        db.add_all(default_data)
+        db.add_all(default_tr)
         db.commit()
     finally:
         db.close()
@@ -168,26 +168,6 @@ def create(tr_dto: TratamientoCreate, db: Session = Depends(get_db)):
     db.refresh(nuevo)
 
     return nuevo
-
-
-@app.put("/api/tratamientos/{id}", response_model=TratamientoResponse)
-def update(id: int, tr_dto: TratamientoUpdate, db: Session = Depends(get_db)):
-
-    tr = db.execute(select(Tratamiento).where(Tratamiento.id == id)).scalar_one_or_none()
-    if not tr:
-        raise HTTPException(404, f"Tratamiento con ID {id} no encontrado")
-
-    tr.nombre = tr_dto.nombre
-    tr.costo = tr_dto.costo
-    tr.tipo = tr_dto.tipo.value
-    tr.descripcion = tr_dto.descripcion
-    tr.duracion = tr_dto.duracion
-    tr.ingreso = tr_dto.ingreso
-
-    db.commit()
-    db.refresh(tr)
-
-    return tr
 
 
 @app.patch("/api/tratamientos/{id}", response_model=TratamientoResponse)
