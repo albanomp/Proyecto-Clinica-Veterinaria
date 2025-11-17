@@ -191,3 +191,19 @@ def update_partial(id: int, duenyo_dto: DuenyoPatch, db: Session = Depends(get_d
     db.refresh(duenyo)
 
     return duenyo
+
+@app.delete("/api/duenyo/{id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete(id: int, db: Session = Depends(get_db)):
+    duenyo = db.execute(
+        select(Duenyo).where(Duenyo.id == id)
+    ).scalar_one_or_none()
+
+    if not duenyo:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"No existe el dueño con id {id}"
+        )
+
+    db.delete(duenyo)
+    db.commit()
+    return None
