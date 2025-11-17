@@ -213,7 +213,7 @@ def find_by_fecha(fecha: date, db: Session = Depends(get_db)):
 @app.post("/api/citas", response_model=CitaResponse, status_code = status.HTTP_201_CREATED)
 def create(cita_dto: CitaCreate, db: Session = Depends(get_db)):
     # validaciones
-    if not cita_dto.fecha:
+    if not cita_dto.fecha_hora:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="La fecha de la cita no puede estar vacío"
