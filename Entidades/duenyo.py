@@ -154,4 +154,40 @@ def create_dueno(dueno_dto: DuenyoCreate, db: Session = Depends(get_db)):
     db.add(nuevo_duenyo)
     db.commit()
     db.refresh(nuevo_duenyo)
-    return nuevo_duenyo
+    return 
+
+@app.patch("/api/duenyo/{id}", response_model=DuenyoResponse)
+def update_partial(id: int, duenyo_dto: DuenyoPatch, db: Session = Depends(get_db)):
+    duenyo = db.execute(
+        select(Duenyo).where(Duenyo.id == id)
+    ).scalar_one_or_none()
+
+    if not duenyo:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"No existe el dueño con id {id}"
+        )
+
+    if duenyo_dto.nombre is not None:
+        if not duenyo_dto.nombre.strip():
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="El nombre no puede estar vacío"
+            )
+        duenyo.nombre = duenyo_dto.nombre.strip()
+
+    if duenyo_dto.telefono is not None:
+        if not duenyo_dto.telefono.strip():
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="El teléfono no puede estar vacío"
+            )
+        duenyo.telefono = duenyo_dto.telefono.strip()
+
+    if duenyo_dto.direccion is not None:
+        duenyo.direccion = duenyo_dto.direccion
+
+    db.commit()
+    db.refresh(duenyo)
+
+    return duenyo
