@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listado de Mascotas</title>
+</head>
+<body>
+    <h1>
+
+    <table>
+        <thead>
+            <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Especie</th>
+            <th>Raza</th>
+            <th>Fecha de Nacimiento</th>
+            <th>Chip</th>
+            </tr>
+        <thead>
+        <tbody>
+            {% for m in mascotas %}
+            <tr>
+                <td>{{m.id}}</td>
+                <td>{{m.nombre}}</td> 
+                <td>{{m.especie}}</td> 
+                <td>{{m.raza}}</td>
+                <td>{{m.fecha_nacimiento}}</td>
+                <td>
+                    {% if m.chip is none %}
+                        -
+                    {% elif m.chip %}
+                        Si
+                    {% else %}
+                        No
+                    {% endif %}
+                </td>
+            <tr>
+            {% endfor %}
+        <tbody>
+    <table>
+</body>
+</html>
