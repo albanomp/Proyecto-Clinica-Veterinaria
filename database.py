@@ -3,7 +3,7 @@ Configuración de la base de datos
 """
 
 from sqlalchemy.orm import DeclarativeBase, sessionmaker
-from sqlalchemy import Integer, String, Float, Boolean, create_engine, select
+from sqlalchemy import create_engine, select
 
 engine = create_engine(
     "sqlite:///Mascotas.db",
@@ -18,6 +18,7 @@ Sessionlocal = sessionmaker(
     expire_on_commit=False
 )
 
+
 class Base(DeclarativeBase):
     pass
 
@@ -26,26 +27,27 @@ def init_db():
     
     from app.models import Mascota, Veterinario, Duenyo, Tratamiento
 
+   
     Base.metadata.create_all(engine)
 
     db = Sessionlocal()
     try:
-        
-        mascota_registrada = db.execute(select(Mascota)).scalars().all()
-        veterinario_empleado = db.execute(select(Veterinario)).scalars().all()
+       
+        veterinarios = db.execute(select(Veterinario)).scalars().all()
+        mascotas = db.execute(select(Mascota)).scalars().all()
 
-        if not veterinario_empleado:
-            veterinario_empleados = [
+        if not veterinarios:
+            default_vets = [
                 Veterinario(nombre="Albano", colegiado=12345, especialidad="Reptiles", telefono=666890121),
                 Veterinario(nombre="Borja", colegiado=11346, especialidad="Mamiferos", telefono=654761015),
                 Veterinario(nombre="Carlota", colegiado=15925, especialidad="Oviparos", telefono=672315692),
                 Veterinario(nombre="Estefania", colegiado=21674, especialidad="Inyecciones", telefono=612362891),
             ]
-            db.add_all(veterinario_empleados)
+            db.add_all(default_vets)
             db.commit()
 
-        if not mascota_registrada:
-            mascotas_defecto = [
+        if not mascotas:
+            default_mascotas = [
                 Mascota(nombre="Alejandro", especie="tortuga", raza="estrellada", fecha_nacimiento="11-09-2001", chip=True),
                 Mascota(nombre="Balboa", especie="Perro", raza="Pastor alemán", fecha_nacimiento="28-11-2018", chip=False),
                 Mascota(nombre="Carlos", especie="Ave", raza="Grajilla", fecha_nacimiento="16-03-2021", chip=True),
@@ -54,49 +56,56 @@ def init_db():
                 Mascota(nombre="Fabricio", especie="Ave", raza="Pájaro Carpintero", fecha_nacimiento="19-09-2024", chip=True),
                 Mascota(nombre="Gabriel", especie="Reptil", raza="Dragón de Komodo", fecha_nacimiento="30-08-2015", chip=False),
             ]
-            db.add_all(mascotas_defecto)
+            db.add_all(default_mascotas)
             db.commit()
 
-        duenyo_registrado = db.execute(select(Duenyo)).scalars().all()
-        tratamiento_registrado = db.execute(select(Tratamiento)).scalars().all()
+     
+        duenyos = db.execute(select(Duenyo)).scalars().all()
 
-        if not duenyo_registrado:
-            duenyos_defecto = [
-                Duenyo(nombre="Javier Morales", telefono="654321987"),
-                Duenyo(nombre="Sandra Ruiz", telefono="622111333"),
-                Duenyo(nombre="Lucía Martín", telefono="611998877"),
+        if not duenyos:
+            default_duenos = [
+                Duenyo(nombre="Paola", telefono="612345678", email="paola80@gmail.com", direccion="Calle Los Olivos 23"),
+                Duenyo(nombre="Carlos", telefono="678912345", email="carlos79@gmail.com", direccion="Av. Gran Canaria 45"),
+                Duenyo(nombre="Lucía", telefono="698745632", email="lucia98@gmail.com", direccion="Calle San Sebastián 12"),
+                Duenyo(nombre="Kevin", telefono="657893221", email="kevin91@gmail.com", direccion="Calle Jerusalén 66"),
+                Duenyo(nombre="Samira", telefono="676356579", email="samira_93@gmail.com", direccion="Av.del Cabildo 57"),
+                Duenyo(nombre="Roberto", telefono="722345987", email="roberto@gmail.com", direccion="Calle Hebanista 34"),
+                Duenyo(nombre="Antonia", telefono="928576576", email="", direccion=""),
             ]
-            db.add_all(duenyos_defecto)
+            db.add_all(default_duenos)
             db.commit()
 
-        if not tratamiento_registrado:
-            tratamientos_defecto = [
+
+        tratamientos = db.execute(select(Tratamiento)).scalars().all()
+
+        if not tratamientos:
+            default_tr = [
                 Tratamiento(
-                    nombre="Vacuna Antirrábica",
-                    costo=40.0,
+                    nombre="Vacuna antirrábica",
+                    costo=45.0,
                     tipo="vacuna",
-                    descripcion="Vacuna anual obligatoria contra la rabia",
+                    descripcion="Vacuna anual para protección de la rabia.",
                     duracion="1 año",
                     ingreso=False
                 ),
                 Tratamiento(
-                    nombre="Desparasitación Interna",
-                    costo=25.0,
-                    tipo="desparasitación",
-                    descripcion="Elimina parásitos internos",
-                    duracion="6 meses",
-                    ingreso=False
-                ),
-                Tratamiento(
-                    nombre="Cirugía menor",
+                    nombre="Limpieza dental",
                     costo=120.0,
-                    tipo="cirugía",
-                    descripcion="Intervención pequeña",
+                    tipo="estetico",
+                    descripcion="Limpieza dental completa bajo sedación.",
                     duracion="2 horas",
                     ingreso=True
                 ),
+                Tratamiento(
+                    nombre="Antibiótico en comprimidos",
+                    costo=22.5,
+                    tipo="medicamento",
+                    descripcion="Antibiótico de amplio espectro por herida infectada.",
+                    duracion="7 días",
+                    ingreso=False
+                )
             ]
-            db.add_all(tratamientos_defecto)
+            db.add_all(default_tr)
             db.commit()
 
     finally:
@@ -109,3 +118,4 @@ def get_db():
         yield db
     finally:
         db.close()
+
