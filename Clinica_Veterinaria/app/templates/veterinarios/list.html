@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listado de Empleados de la clínica</title>
+</head>
+<body>
+    <h1>
+
+    <table>
+        <thead>
+            <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Colegiado</th>
+            <th>Especialidad</th>
+            <th>Telefono</th>
+            </tr>
+        <thead>
+        <tbody>
+            {% for v in veterinarios %}
+            <tr>
+                <td>{{v.id}}</td>
+                <td>{{v.nombre}}</td> 
+                <td>{{v.colegiado}}</td> 
+                <td>{{v.especialidad}}</td>
+                <td>{{v.telefono}}</td>
+            <td>
+              <a href="/veterinarios/{{v.id}}">Ver empleado</a>
+            </td>
+            <tr>
+            {% endfor %}
+        <tbody>
+    <table>
+</body>
+</html>
