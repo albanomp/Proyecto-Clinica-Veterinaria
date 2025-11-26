@@ -7,6 +7,10 @@
     <title>Clinica Veterinaria Joralmar</title>
 </head>
 <body>
-<h1> Clinica Veterinaria Joralmar </h1>
+    <h1> Clinica Veterinaria Joralmar </h1>
+    <a href="/mascotas">Lista de Mascotas</a>
+    <a href="/veterinarios">Lista de Empleados</a>
+    <a href="/mascotas/{mascota_id}">Ver mascota registrada</a>
+    <a href="/veterinarios/{veterinario_id}">Ver empleado registrado</a>
 </body>
 </html>
