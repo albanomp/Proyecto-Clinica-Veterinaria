@@ -1,11 +1,46 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Detalle del tratamiento</title>
 </head>
 <body>
-    
+    <h1>Detalle del tratamiento</h1>
+
+    <div>
+        <div>ID: <span>{{ tratamiento.id }}</span></div>
+
+        <div>Nombre: <span>{{ tratamiento.nombre }}</span></div>
+
+        <div>Costo: <span>{{ tratamiento.costo }} €</span></div>
+
+        <div>Tipo: <span>{{ tratamiento.tipo }}</span></div>
+
+        <div>Descripción:
+            <span>
+                {% if tratamiento.descripcion %}
+                    {{ tratamiento.descripcion }}
+                {% else %}
+                    No especificada
+                {% endif %}
+            </span>
+        </div>
+
+        <div>Duración: <span>{{ tratamiento.duracion }}</span></div>
+
+        <div>Requiere ingreso:
+            <span>
+                {% if tratamiento.ingreso %}
+                    Sí
+                {% else %}
+                    No
+                {% endif %}
+            </span>
+        </div>
+    </div>
+
+    <br>
+    <a href="/tratamientos">Volver al listado</a>
 </body>
 </html>

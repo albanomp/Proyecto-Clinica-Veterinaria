@@ -1,11 +1,42 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Detalle del dueño</title>
 </head>
 <body>
-    
+    <h1>Detalle del dueño</h1>
+
+    <div>
+        <div>ID: <span>{{ duenyo.id }}</span></div>
+
+        <div>Nombre: <span>{{ duenyo.nombre }}</span></div>
+
+        <div>Teléfono: <span>{{ duenyo.telefono }}</span></div>
+
+        <div>Email: 
+            <span>
+                {% if duenyo.email %}
+                    {{ duenyo.email }}
+                {% else %}
+                    No especificado
+                {% endif %}
+            </span>
+        </div>
+
+        <div>Dirección:
+            <span>
+                {% if duenyo.direccion %}
+                    {{ duenyo.direccion }}
+                {% else %}
+                    No especificada
+                {% endif %}
+            </span>
+        </div>
+    </div>
+
+    <br>
+    <a href="/duenyos">Volver al listado</a>
 </body>
 </html>
