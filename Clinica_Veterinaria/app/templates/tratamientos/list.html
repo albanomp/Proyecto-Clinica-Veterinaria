@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💉🐾 Listado de tratamientos</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+</head>
+
+<body>
+    <div class="container mt-5">
+
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1>Listado de tratamientos <i class="fa-solid fa-syringe"></i><i class="fa-solid fa-paw"></i></h1>
+            <a href="/tratamientos/new" class="btn btn-primary">
+                <i class="fa-solid fa-plus"></i> Nuevo tratamiento
+            </a>
+        </div>
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Tipo</th>
+                    <th>Costo (€)</th>
+                    <th>Ingreso</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for tratamiento in tratamientos %}
+                <tr>
+                    <td>{{ tratamiento.id }}</td>
+                    <td>{{ tratamiento.nombre }}</td>
+                    <td>{{ tratamiento.tipo }}</td>
+                    <td>{{ tratamiento.costo }}</td>
+                    <td>
+                        {% if tratamiento.ingreso is none %}
+                            -
+                        {% elif tratamiento.ingreso %}
+                            Sí
+                        {% else %}
+                            No
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="/tratamientos/{{ tratamiento.id }}" class="btn btn-info">
+                            <i class="fa-solid fa-eye"></i> Ver
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+
+        </table>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
