@@ -3,44 +3,79 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detalle del tratamiento</title>
+    <title>💉Detalle del tratamiento</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
 </head>
+
 <body>
-    <h1>Detalle del tratamiento</h1>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
 
-    <div>
-        <div>ID: <span>{{ tratamiento.id }}</span></div>
+                <div class="card shadow" style="width: 32rem;">
+                    <div class="card-header bg-success text-white">
+                        <h2 class="card-title mb-0">
+                            <i class="fa-solid fa-syringe"></i> Detalle del tratamiento
+                        </h2>
+                    </div>
 
-        <div>Nombre: <span>{{ tratamiento.nombre }}</span></div>
+                    <div class="card-body">
 
-        <div>Costo: <span>{{ tratamiento.costo }} €</span></div>
+                        <div class="mb-3">
+                            <h5 class="text-body-secondary">ID</h5>
+                            <p class="fs-5">{{ tratamiento.id }}</p>
+                        </div>
+                        <hr>
 
-        <div>Tipo: <span>{{ tratamiento.tipo }}</span></div>
+                        <div class="mb-3">
+                            <h5 class="text-body-secondary">Nombre</h5>
+                            <p class="fs-4 fw-bold">{{ tratamiento.nombre }}</p>
+                        </div>
+                        <hr>
 
-        <div>Descripción:
-            <span>
-                {% if tratamiento.descripcion %}
-                    {{ tratamiento.descripcion }}
-                {% else %}
-                    No especificada
-                {% endif %}
-            </span>
-        </div>
+                        <div class="mb-3">
+                            <h5 class="text-body-secondary">Tipo</h5>
+                            <p class="fs-5">{{ tratamiento.tipo }}</p>
+                        </div>
+                        <hr>
 
-        <div>Duración: <span>{{ tratamiento.duracion }}</span></div>
+                        <div class="mb-3">
+                            <h5 class="text-body-secondary">Costo</h5>
+                            <p class="fs-5">{{ tratamiento.costo }} €</p>
+                        </div>
+                        <hr>
 
-        <div>Requiere ingreso:
-            <span>
-                {% if tratamiento.ingreso %}
-                    Sí
-                {% else %}
-                    No
-                {% endif %}
-            </span>
+                        <div class="mb-3">
+                            <h5 class="text-body-secondary">Duración</h5>
+                            <p class="fs-5">{{ tratamiento.duracion }}</p>
+                        </div>
+                        <hr>
+
+                        <div class="mb-3">
+                            <h5 class="text-body-secondary">Requiere ingreso</h5>
+                            <p class="fs-5">
+                                {% if tratamiento.ingreso %}
+                                    <span class="badge bg-danger">Sí</span>
+                                {% else %}
+                                    <span class="badge bg-success">No</span>
+                                {% endif %}
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <div class="card-footer">
+                        <a href="/tratamientos" class="btn btn-secondary">
+                            <i class="fa-solid fa-arrow-left"></i> Volver a la lista
+                        </a>
+                    </div>
+
+                </div>
+
+            </div>
         </div>
     </div>
-
-    <br>
-    <a href="/tratamientos">Volver al listado</a>
 </body>
 </html>

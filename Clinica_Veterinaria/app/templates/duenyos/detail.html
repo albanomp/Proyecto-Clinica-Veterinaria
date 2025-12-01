@@ -3,40 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detalle del dueño</title>
+    <title>👤Detalle del dueño</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
 </head>
+
 <body>
-    <h1>Detalle del dueño</h1>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
 
-    <div>
-        <div>ID: <span>{{ duenyo.id }}</span></div>
+                <div class="card shadow" style="width: 32rem;">
+                    <div class="card-header bg-info text-white">
+                        <h2 class="card-title mb-0">
+                            <i class="fa-solid fa-user"></i>Detalle del dueño
+                        </h2>
+                    </div>
 
-        <div>Nombre: <span>{{ duenyo.nombre }}</span></div>
+                    <div class="card-body">
 
-        <div>Teléfono: <span>{{ duenyo.telefono }}</span></div>
+                        <div class="mb-3">
+                            <h5 class="text-body-secondary">ID</h5>
+                            <p class="fs-5">{{ duenyo.id }}</p>
+                        </div>
+                        <hr>
 
-        <div>Email: 
-            <span>
-                {% if duenyo.email %}
-                    {{ duenyo.email }}
-                {% else %}
-                    No especificado
-                {% endif %}
-            </span>
-        </div>
+                        <div class="mb-3">
+                            <h5 class="text-body-secondary">Nombre</h5>
+                            <p class="fs-4 fw-bold">{{ duenyo.nombre }}</p>
+                        </div>
+                        <hr>
 
-        <div>Dirección:
-            <span>
-                {% if duenyo.direccion %}
-                    {{ duenyo.direccion }}
-                {% else %}
-                    No especificada
-                {% endif %}
-            </span>
+                        <div class="mb-3">
+                            <h5 class="text-body-secondary">Teléfono</h5>
+                            <p class="fs-5">{{ duenyo.telefono }}</p>
+                        </div>
+                        <hr>
+
+                        <div class="mb-3">
+                            <h5 class="text-body-secondary">Email</h5>
+                            <p class="fs-5">
+                                {% if duenyo.email %}
+                                    {{ duenyo.email }}
+                                {% else %}
+                                    <span class="text-body-secondary">No especificado</span>
+                                {% endif %}
+                            </p>
+                        </div>
+                        <hr>
+
+                        <div class="mb-3">
+                            <h5 class="text-body-secondary">Dirección</h5>
+                            <p class="fs-5">
+                                {% if duenyo.direccion %}
+                                    {{ duenyo.direccion }}
+                                {% else %}
+                                    <span class="text-body-secondary">No especificado</span>
+                                {% endif %}
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <div class="card-footer">
+                        <a href="/duenyos" class="btn btn-secondary">
+                            <i class="fa-solid fa-arrow-left"></i> Volver a la lista
+                        </a>
+                    </div>
+
+                </div>
+            </div>
         </div>
     </div>
-
-    <br>
-    <a href="/duenyos">Volver al listado</a>
 </body>
 </html>

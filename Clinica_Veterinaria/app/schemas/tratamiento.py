@@ -10,6 +10,8 @@ class TipoTratamiento(str, Enum):
     otro = "otro"
 
 class TratamientoCreate(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     nombre: str
     costo: float = 0.0
     tipo: TipoTratamiento = TipoTratamiento.otro
@@ -19,6 +21,8 @@ class TratamientoCreate(BaseModel):
 
 
 class TratamientoUpdate(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     nombre: str
     costo: float
     tipo: TipoTratamiento
@@ -28,6 +32,8 @@ class TratamientoUpdate(BaseModel):
 
 
 class TratamientoPatch(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     nombre: str | None = None
     costo: float | None = None
     tipo: TipoTratamiento | None = None
