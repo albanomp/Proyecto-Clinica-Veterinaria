@@ -3,61 +3,96 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Clínica Veterinaria Joralmar</title>
+    <title>🐾 Clínica Veterinaria Joralmar</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
 </head>
 
-<body class="bg-light"> <!-- Color de fondo soft -->
-
+<body>
     <div class="container mt-5">
 
+        <!-- ENCABEZADO COMO LA PROFE -->
         <div class="row justify-content-center mb-5">
             <div class="col-md-8 text-center">
 
-                <h1 class="display-4 mb-4 text-primary">
-                    Clínica Veterinaria Joralmar <i class="fa-solid fa-paw"></i>
+                <h1 class="display-4 mb-4">
+                    Clínica Veterinaria Joralmar 
+                    <i class="fa-solid fa-paw fa-bounce" style="color:#0d6efd;"></i>
                 </h1>
 
-                <p class="lead mb-4 text-secondary">Cuidamos de tus mejores amigos🐶🐱</p>
+                <p class="lead mb-4 text-secondary">
+                    Cuidamos de tus mejores amigos con amor 💙
+                </p>
 
-                <a href="/mascotas" class="btn btn-primary btn-lg me-2">
-                    Lista de Mascotas <i class="fa-solid fa-dog"></i>
-                </a>
-
-                <a href="/veterinarios" class="btn btn-success btn-lg">
-                    Lista de Empleados <i class="fa-solid fa-user-nurse"></i>
-                </a>
             </div>
         </div>
 
-        <div class="row justify-content-center">
+        <!-- PRIMERA FILA: MASCOTAS, EMPLEADOS, DUEÑOS -->
+        <div class="row text-center">
+
+            <!-- MASCOTAS -->
+            <div class="col-md-4 mb-4">
+                <h2 class="text-primary mb-3">
+                    Mascotas <i class="fa-solid fa-dog"></i>
+                </h2>
+
+                <a href="/mascotas" class="btn btn-primary btn-lg w-100 mb-2">
+                    Lista de Mascotas
+                </a>
+
+                <a href="/mascotas/1" class="btn btn-outline-primary btn-lg w-100">
+                    Ver Mascota Registrada
+                </a>
+            </div>
+
+            <!-- EMPLEADOS -->
+            <div class="col-md-4 mb-4">
+                <h2 class="text-success mb-3">
+                    Empleados <i class="fa-solid fa-user-nurse"></i>
+                </h2>
+
+                <a href="/veterinarios" class="btn btn-success btn-lg w-100 mb-2">
+                    Lista de Empleados
+                </a>
+
+                <a href="/veterinarios/1" class="btn btn-outline-success btn-lg w-100">
+                    Ver Empleado Registrado
+                </a>
+            </div>
+
+            <!-- DUEÑOS -->
+            <div class="col-md-4 mb-4">
+                <h2 class="text-warning mb-3">
+                    Dueños <i class="fa-solid fa-users"></i>
+                </h2>
+
+                <a href="/duenyos" class="btn btn-warning btn-lg w-100 mb-2">
+                    Lista de Dueños
+                </a>
+
+                <a href="/duenyos/1" class="btn btn-outline-warning btn-lg w-100">
+                    Ver Dueño Registrado
+                </a>
+            </div>
+
+        </div>
+
+        <!-- SEGUNDA FILA: TRATAMIENTOS CENTRADO -->
+        <div class="row justify-content-center mt-3">
             <div class="col-md-6 text-center">
 
-                <a href="/mascotas/{mascota_id}" class="btn btn-info btn-lg w-100 mb-3">
-                    Ver mascota registrada <i class="fa-solid fa-eye"></i>
+                <h2 class="text-danger mb-3">
+                    Tratamientos <i class="fa-solid fa-syringe"></i>
+                </h2>
+
+                <a href="/tratamientos" class="btn btn-danger btn-lg w-100 mb-2">
+                    Lista de Tratamientos
                 </a>
 
-                <a href="/veterinarios/{veterinario_id}" class="btn btn-secondary btn-lg w-100 mb-3">
-                    Ver empleado registrado <i class="fa-solid fa-eye"></i>
-                </a>
-
-                <a href="/duenyos" class="btn btn-warning btn-lg w-100 mb-3">
-                    Lista de dueños <i class="fa-solid fa-users"></i>
-                </a>
-
-                <a href="/duenyos/{duenyos_id}" class="btn btn-dark btn-lg w-100 mb-3">
-                    Ver dueños registrados <i class="fa-solid fa-eye"></i>
-                </a>
-
-                <a href="/tratamientos" class="btn btn-danger btn-lg w-100 mb-3">
-                    Lista de tratamientos <i class="fa-solid fa-syringe"></i>
-                </a>
-
-                <a href="/tratamientos{tratamientos_id}" class="btn btn-secondary btn-lg w-100 mb-3">
-                    Ver tratamientos registrados <i class="fa-solid fa-eye"></i>
+                <a href="/tratamientos/1" class="btn btn-outline-danger btn-lg w-100">
+                    Ver Tratamiento Registrado
                 </a>
 
             </div>
