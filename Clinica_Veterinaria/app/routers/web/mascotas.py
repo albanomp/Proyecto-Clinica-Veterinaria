@@ -183,7 +183,7 @@ def detalle_mascota(mascota_id: int, request: Request, db: Session = Depends(get
 
 
 
-@router.delete("/{mascota_id}/eliminar", response_class=HTMLResponse)
+@router.post("/{mascota_id}/eliminar", response_class=HTMLResponse)
 def eliminar_mascota(request: Request, mascota_id: int, db: Session = Depends(get_db)):
     mascota = db.execute(select(Mascota).where(Mascota.id == mascota_id)).scalar_one_or_none()
     if mascota is None:
@@ -195,3 +195,4 @@ def eliminar_mascota(request: Request, mascota_id: int, db: Session = Depends(ge
     except Exception as e:
         db.rollback()
         raise HTTPException(status_code=500, detail=f"Error al eliminar la mascota: {str(e)}")
+
