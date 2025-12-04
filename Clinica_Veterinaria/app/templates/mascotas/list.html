@@ -38,10 +38,20 @@
                 </td>
                 <td>
                     <a href="/mascotas/{{m.id}}">Ver mascota</a>
+                    <a href="/mascotas/{{m.id}}/editar">Editar mascota</a>
+                    <form action="/mascotas/{{m.id}}/eliminar" method="post" style="display:inline;">
+                        <button type="submit" onclick="return confirm('¿Seguro que quieres eliminar esta mascota');">
+                            Eliminar
+                        </button>
+                    </form>
                 </td>
             <tr>
             {% endfor %}
         <tbody>
     <table>
+    <br>
+    <a href="/mascotas/nuevo">
+        <button> Crear nueva mascota</button>
+    </a>
 </body>
 </html>
