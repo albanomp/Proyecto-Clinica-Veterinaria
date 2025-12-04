@@ -1,6 +1,8 @@
 
 
-from pydantic import BaseModel, ConfigDict
+
+
+from pydantic import BaseModel, ConfigDict, field_validator
 
 
 class RespuestaMascota(BaseModel):
@@ -11,6 +13,12 @@ class RespuestaMascota(BaseModel):
     raza: str
     fecha_nacimiento: str
     chip: bool | None
+    @field_validator("nombre","especie","raza","fecha_nacimiento")
+    @classmethod
+    def validate_not_empty(RespuestaMascota, m:str)->str:
+        if not m or not m.strip():
+            raise ValueError("Este campo no puede estar vacio")
+        return m.strip()
 
 class CrearMascota(BaseModel):
     model_config=ConfigDict(from_attributes=True)
@@ -19,6 +27,12 @@ class CrearMascota(BaseModel):
     raza: str
     fecha_nacimiento: str
     chip: bool | None
+    @field_validator("nombre","especie","raza","fecha_nacimiento")
+    @classmethod
+    def validate_not_empty(RespuestaMascota, m:str)->str:
+        if not m or not m.strip():
+            raise ValueError("Este campo no puede estar vacio")
+        return m.strip()
     
 class ActualizarMascota(BaseModel):
     model_config=ConfigDict(from_attributes=True)
@@ -27,6 +41,12 @@ class ActualizarMascota(BaseModel):
     raza: str
     fecha_nacimiento: str
     chip: bool | None
+    @field_validator("nombre","especie","raza","fecha_nacimiento")
+    @classmethod
+    def validate_not_empty(RespuestaMascota, m:str)->str:
+        if not m or not m.strip():
+            raise ValueError("Este campo no puede estar vacio")
+        return m.strip()
 
 class ParcheMascota(BaseModel):
     model_config=ConfigDict(from_attributes=True)
