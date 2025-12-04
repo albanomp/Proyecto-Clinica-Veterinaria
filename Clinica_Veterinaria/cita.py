@@ -3,7 +3,7 @@
 
 from datetime import date, datetime
 from fastapi import Depends, FastAPI, HTTPException, status
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, field_validator
 from sqlalchemy import create_engine, Integer, String, Boolean, func, select, DateTime
 from sqlalchemy.orm import sessionmaker, DeclarativeBase, Mapped, mapped_column, Session
 
@@ -75,6 +75,35 @@ class CitaCreate(BaseModel):
     veterinario_id: int
     mascota_id: int
 
+    @field_validator("fecha_hora")
+    @classmethod
+    def validate_fecha_hora(cls, v: datetime) -> datetime:
+        # valida que la fecha no esté vacía
+        if not v:
+            raise ValueError("La fecha de la cita no puede estar vacío")
+        # valida que la fecha no sea en el pasado
+        if v < datetime.now():
+            raise ValueError("La fecha de la cita no puede ser en el pasado")
+        # si todo va bien, devuelve la fecha
+        return v
+    
+    @field_validator("motivo")
+    @classmethod
+    def validate_motivo(cls, v: str) -> str:
+        # valida que el motivo no esté vacío ni sea sólo espacios
+        if not v or not v.strip():
+            raise ValueError("El motivo de la cita no puede estar vacío")
+        return v.strip()
+    
+    @field_validator("veterinario_id", "mascota_id")
+    @classmethod
+    def validate_positive_id(cls, v: int) -> int:
+        # valida que los id sean positivos
+        if v is None or v <= 0:
+            raise ValueError("El identificador debe ser un número entero positivo")
+        return v
+
+
 # schema para ACTUALIZACIÓN COMPLETA (PUT)
 # todos los campos se tienen que enviar
 class CitaUpdate(BaseModel):
@@ -85,6 +114,34 @@ class CitaUpdate(BaseModel):
     veterinario_id: int
     mascota_id: int
 
+    @field_validator("fecha_hora")
+    @classmethod
+    def validate_fecha_hora(cls, v: datetime) -> datetime:
+        # valida que la fecha no esté vacía
+        if not v:
+            raise ValueError("La fecha de la cita no puede estar vacío")
+        # valida que la fecha no sea en el pasado
+        if v < datetime.now():
+            raise ValueError("La fecha de la cita no puede ser en el pasado")
+        # si todo va bien, devuelve la fecha
+        return v
+    
+    @field_validator("motivo")
+    @classmethod
+    def validate_motivo(cls, v: str) -> str:
+        # valida que el motivo no esté vacío ni sea sólo espacios
+        if not v or not v.strip():
+            raise ValueError("El motivo de la cita no puede estar vacío")
+        return v.strip()
+    
+    @field_validator("veterinario_id", "mascota_id")
+    @classmethod
+    def validate_positive_id(cls, v: int) -> int:
+        # valida que los id sean positivos
+        if v is None or v <= 0:
+            raise ValueError("El identificador debe ser un número entero positivo")
+        return v
+    
 # schema para ACTUALIZACIÓN PARCIAL (PATCH)
 # sólo se envían los campos que quieras actualizar
 class CitaPatch(BaseModel):
@@ -95,13 +152,52 @@ class CitaPatch(BaseModel):
     veterinario_id: int | None = None
     mascota_id: int | None = None
 
+    @field_validator("fecha_hora")
+    @classmethod
+    def validate_fecha_hora(cls, v: datetime | None) -> datetime | None:
+        # si no se proporcionó valor (None), no validamos
+        if v is None:
+            return None
+        
+        # valida que la fecha no esté vacía
+        if not v:
+            raise ValueError("La fecha de la cita no puede estar vacío")
+        # valida que la fecha no sea en el pasado
+        if v < datetime.now():
+            raise ValueError("La fecha de la cita no puede ser en el pasado")
+        # si todo va bien, devuelve la fecha
+        return v
+    
+    @field_validator("motivo")
+    @classmethod
+    def validate_motivo(cls, v: str | None) -> str | None:
+        # si no se proporcionó valor (None), no validamos
+        if v is None:
+            return None
+        
+        # valida que el motivo no esté vacío ni sea sólo espacios
+        if not v or not v.strip():
+            raise ValueError("El motivo de la cita no puede estar vacío")
+        return v.strip()
+    
+    @field_validator("veterinario_id", "mascota_id")
+    @classmethod
+    def validate_positive_id(cls, v: int | None) -> int | None:
+        # si no se proporcionó valor (None), no validamos
+        if v is None:
+            return None
+        
+        # valida que los id sean positivos
+        if v <= 0:
+            raise ValueError("El identificador debe ser un número entero positivo")
+        return v
 
 # INICIALIZACIÓN BASE DE DATOS
 
 # crear todas las tablas
 Base.metadata.create_all(engine)
 
-# método inicializar con canciones por defecto
+# método inicializar con citas por defecto
 def init_db():
     """
     Inializa la base de datos con citas por defecto si está vacía.
@@ -192,7 +288,7 @@ def find_by_id(id: int, db: Session = Depends(get_db)):
         )
     return cita
 
-
+# GET - obtener TODAS las citas de una fecha concreta
 @app.get("/api/citas/fecha/{fecha}", response_model=list[CitaResponse])
 def find_by_fecha(fecha: date, db: Session = Depends(get_db)):
 
@@ -212,47 +308,30 @@ def find_by_fecha(fecha: date, db: Session = Depends(get_db)):
 # POST - crear una nueva cita
 @app.post("/api/citas", response_model=CitaResponse, status_code = status.HTTP_201_CREATED)
 def create(cita_dto: CitaCreate, db: Session = Depends(get_db)):
-    # validaciones
-    if not cita_dto.fecha_hora:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="La fecha de la cita no puede estar vacío"
-        )
 
-    if not cita_dto.motivo.strip():
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="El motivo de la cita no puede estar vacío"
-        )
-    
-    if cita_dto.veterinario_id is None or cita_dto.veterinario_id <= 0:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="El veterinario de la cita debe tener un identificador válido"
-        )
-    
-    if cita_dto.mascota_id is None or cita_dto.mascota_id <= 0:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="La mascota de la cita debe tener un identificador válido"
-        )
 
-            
     # crea objeto Cira con datos validados
-    cita = Cita(
-        fecha_hora=cita_dto.fecha_hora,
-        motivo=cita_dto.motivo.strip(),
-        veterinario_id=cita_dto.veterinario_id,
-        mascota_id=cita_dto.mascota_id
-    )
 
+    # cita = Cita(
+    #     fecha_hora=cita_dto.fecha_hora,
+    #     motivo=cita_dto.motivo,
+    #     veterinario_id=cita_dto.veterinario_id,
+    #     mascota_id=cita_dto.mascota_id
+    #     )
 
+    # Otra forma de crear el objeto usando un bucle
+    cita = Cita()
+
+    update_data = cita_dto.model_dump()
     
+    for field, value in update_data.items():
+        setattr(cita, field, value)
+
+
     db.add(cita) # agrega el objeto a la sesión
     db.commit() # confirma la creación en base de datos
     db.refresh(cita) # refresca el objeto para obtener el id generado
     return cita # retorna la canción creada
-
 
 
 # PUT - actualizar COMPLETAMENTE una canción
@@ -269,36 +348,17 @@ def update_full(id: int, cita_dto: CitaUpdate, db: Session = Depends(get_db)):
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"No se ha encontrado la canción con id {id}"
         )
+    
+    # cita.fecha_hora = cita_dto.fecha_hora
+    # cita.motivo = cita_dto.motivo
+    # cita.veterinario_id = cita_dto.veterinario_id
+    # cita.mascota_id = cita_dto.mascota_id
 
-    # validaciones
-    if not cita_dto.fecha_hora:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="La fecha de la cita no puede estar vacío"
-        )
+    # guarda el diccionario sacado de cita_dto 
+    update_data = cita_dto.model_dump()
+    for field, value in update_data.items():
+        setattr(cita, field, value)
 
-    if not cita_dto.motivo.strip():
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="El motivo de la cita no puede estar vacío"
-        )
-    
-    if cita_dto.veterinario_id is None or cita_dto.veterinario_id <= 0:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="El veterinario de la cita debe tener un identificador válido"
-        )
-    
-    if cita_dto.mascota_id is None or cita_dto.mascota_id <= 0:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="La mascota de la cita debe tener un identificador válido"
-        )
-    
-    cita.fecha_hora = cita_dto.fecha_hora
-    cita.motivo = cita_dto.motivo.strip()
-    cita.veterinario_id = cita_dto.veterinario_id
-    cita.mascota_id = cita_dto.mascota_id
 
     
     db.commit() # confirma los cambios
@@ -321,43 +381,25 @@ def update_partial(id: int, cita_dto: CitaPatch, db: Session = Depends(get_db)):
         )
     
     # actualiza SÓLO los campos que se han enviado (no son None)
-    if cita_dto.fecha_hora is not None:
-        if not cita_dto.fecha_hora:
-            raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="La fecha de la cita no puede estar vacío"
-        )
-        cita.fecha_hora = cita_dto.fecha_hora
+    # if cita_dto.fecha_hora is not None:
+    #     cita.fecha_hora = cita_dto.fecha_hora
 
-    if cita_dto.motivo is not None:
-        if not cita_dto.motivo.strip():
-            raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="El motivo de la cita no puede estar vacío"
-        )
-        cita.motivo = cita_dto.motivo.strip()
+    # if cita_dto.motivo is not None:
+    #     cita.motivo = cita_dto.motivo
 
 
 
-    if cita_dto.veterinario_id is not None:
-        if cita_dto.veterinario_id <= 0:
-            raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="El veterinario de la cita debe tener un identificador válido"
-        )
-        cita.veterinario_id = cita_dto.veterinario_id
+    # if cita_dto.veterinario_id is not None:
+    #     cita.veterinario_id = cita_dto.veterinario_id
         
     
-    if cita_dto.mascota_id is not None:
-        if cita_dto.mascota_id <= 0:
-            raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="La mascota de la cita debe tener un identificador válido"
-        )
-        cita.mascota_id = cita_dto.mascota_id
-    
-    # if cita_dto.explicit is not None:
-    #     cita.explicit = cita_dto.explicit
+    # if cita_dto.mascota_id is not None:
+    #     cita.mascota_id = cita_dto.mascota_id
+
+
+    update_data = cita_dto.model_dump(exclude_unset=True)
+    for field, value in update_data.items():
+        setattr(cita, field, value) 
     
     db.commit() # confirma los cambios en base datos
     db.refresh(cita) # refresca el objeto
@@ -382,4 +424,3 @@ def delete_by_id(id: int, db: Session = Depends(get_db)):
     db.delete(cita) # marca el objeto para eliminación
     db.commit() # confirma la eliminación en base de datos
     return None
-
