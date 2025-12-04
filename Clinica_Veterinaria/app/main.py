@@ -1,7 +1,7 @@
 from fastapi import FastAPI
-from app.routes.api import router as api_router
-from app.database import init_db
-from app.routes.web import router as web_router
+from app.routers.api import router as api_router
+from database import init_db
+from app.routers.web import router as web_router
 
 
 app= FastAPI(title="Veterinaria",version="1.0.0")
