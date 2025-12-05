@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from app.routers.api import router as api_router
-from database import init_db
+from app.database import init_db
 from app.routers.web import router as web_router
 
 
