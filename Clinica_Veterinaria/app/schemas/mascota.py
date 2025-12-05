@@ -13,7 +13,7 @@ class RespuestaMascota(BaseModel):
     raza: str
     fecha_nacimiento: str
     chip: bool | None
-    @field_validator("nombre","especie","raza","fecha_nacimiento")
+    @field_validator("nombre","especie","raza")
     @classmethod
     def validate_not_empty(RespuestaMascota, m:str)->str:
         if not m or not m.strip():
@@ -27,7 +27,7 @@ class CrearMascota(BaseModel):
     raza: str
     fecha_nacimiento: str
     chip: bool | None
-    @field_validator("nombre","especie","raza","fecha_nacimiento")
+    @field_validator("nombre","especie","raza")
     @classmethod
     def validate_not_empty(RespuestaMascota, m:str)->str:
         if not m or not m.strip():
@@ -41,7 +41,7 @@ class ActualizarMascota(BaseModel):
     raza: str
     fecha_nacimiento: str
     chip: bool | None
-    @field_validator("nombre","especie","raza","fecha_nacimiento")
+    @field_validator("nombre","especie","raza")
     @classmethod
     def validate_not_empty(RespuestaMascota, m:str)->str:
         if not m or not m.strip():
