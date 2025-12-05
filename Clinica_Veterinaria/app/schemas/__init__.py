@@ -5,5 +5,5 @@ from app.schemas.veterinario import RespuestaVeterinario, CrearVeterinario, Parc
 
 __all__=["RespuestaMascota", "CrearMascota", "ParcheMascota", "ActualizarMascota", "RespuestaVeterinario", "CrearVeterinario", "ParcheVeterinario",
         "ActualizarVeterinario", "DuenyoResponse", "DuenyoCreate", "DuenyoUpdate", "DuenyoPatch", "TipoTratamiento", "TratamientoCreate",
-        "TratamientoUpdate", "TratamientoPatch", "TratamientoResponse"]
+        "TratamientoUpdate", "TratamientoPatch", "TratamientoResponse", "CitaResponse", "CitaCreate", "CitaUpdate", "CitaPatch"]
 
