@@ -4,11 +4,11 @@ Contienen los endpoints que renderizan HTMLs
 """
 
 from fastapi import APIRouter
-from app.routes.web import home
-from app.routes.web import mascotas
-from app.routes.web import veterinario
-from app.routes.web import duenyo
-from app.routes.web import tratamiento
+from app.routers.web import home
+from app.routers.web import mascotas
+from app.routers.web import veterinario
+from app.routers.web import duenyo
+from app.routers.web import tratamiento
 
 
 router = APIRouter()
