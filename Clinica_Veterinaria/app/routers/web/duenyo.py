@@ -4,7 +4,7 @@ from fastapi.responses import HTMLResponse, RedirectResponse
 from sqlalchemy.orm import Session
 from sqlalchemy import select
 
-from Clinica_Veterinaria.app.schemas import duenyo
+from app.schemas import duenyo
 from app.database import get_db
 from app.models import Duenyo 
 
