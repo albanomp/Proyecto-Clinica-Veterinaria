@@ -1,57 +1,141 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Listado de Mascotas</title>
-</head>
-<body>
-    <h1>
 
-    <table>
-        <thead>
-            <tr>
-            <th>ID</th>
-            <th>Nombre</th>
-            <th>Especie</th>
-            <th>Raza</th>
-            <th>Fecha de Nacimiento</th>
-            <th>Chip</th>
-            </tr>
-        <thead>
-        <tbody>
-            {% for m in mascotas %}
-            <tr>
-                <td>{{m.id}}</td>
-                <td>{{m.nombre}}</td> 
-                <td>{{m.especie}}</td> 
-                <td>{{m.raza}}</td>
-                <td>{{m.fecha_nacimiento}}</td>
-                <td>
-                    {% if m.chip is none %}
-                        -
-                    {% elif m.chip %}
-                        Si
-                    {% else %}
-                        No
-                    {% endif %}
-                </td>
-                <td>
-                    <a href="/mascotas/{{m.id}}">Ver mascota</a>
-                    <a href="/mascotas/{{m.id}}/editar">Editar mascota</a>
-                    <form action="/mascotas/{{m.id}}/eliminar" method="post" style="display:inline;">
-                        <button type="submit" onclick="return confirm('¿Seguro que quieres eliminar esta mascota');">
-                            Eliminar
-                        </button>
-                    </form>
-                </td>
-            <tr>
-            {% endfor %}
-        <tbody>
-    <table>
-    <br>
-    <a href="/mascotas/nuevo">
-        <button> Crear nueva mascota</button>
-    </a>
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <style>
+        body {
+            background-color: #f6f7fb;
+        }
+
+        .table-container {
+            margin-top: 40px;
+        }
+
+        .icon-animal {
+            font-size: 22px;
+        }
+
+        .btn i {
+            margin-right: 6px;
+        }
+
+        .btn-danger i {
+            margin-right: 4px;
+        }
+
+        /* Hover bonito para la tabla */
+        tbody tr:hover {
+            background-color: #eef5ff;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+    <h1 class="text-center my-4">
+        <i class="fa-solid fa-paw"></i> Listado de Mascotas
+    </h1>
+
+    <div class="table-responsive table-container">
+        <table class="table table-hover align-middle shadow-sm bg-white rounded">
+            <thead class="table-primary">
+                <tr>
+                    <th>ID</th>
+                    <th>Animal</th>
+                    <th>Nombre</th>
+                    <th>Especie</th>
+                    <th>Raza</th>
+                    <th>Fecha de Nacimiento</th>
+                    <th>Chip</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for m in mascotas %}
+                <tr>
+                    <td>{{m.id}}</td>
+
+                    <!-- Icono según especie -->
+                    <td class="icon-animal">
+                        {% if m.especie|lower == "perro" %}
+                            <i class="fa-solid fa-dog text-primary"></i>
+                        {% elif m.especie|lower == "gato" %}
+                            <i class="fa-solid fa-cat text-warning"></i>
+                        {% elif m.especie|lower == "ave" %}
+                            <i class="fa-solid fa-dove text-info"></i>
+                        {% elif m.especie|lower == "reptil" %}
+                            <i class="fa-solid fa-worm text-info"></i>
+                        {% else %}
+                            <i class="fa-solid fa-paw text-secondary"></i>
+                        {% endif %}
+                    </td>
+
+                    <td>{{m.nombre}}</td>
+                    <td>{{m.especie}}</td>
+                    <td>{{m.raza}}</td>
+                    <td>{{m.fecha_nacimiento}}</td>
+
+                    <td>
+                        {% if m.chip is none %}
+                            -
+                        {% elif m.chip %}
+                            <span class="badge bg-success"><i class="fa-solid fa-check"></i> Sí</span>
+                        {% else %}
+                            <span class="badge bg-secondary">No</span>
+                        {% endif %}
+                    </td>
+
+                    <td>
+                        <a href="/mascotas/{{m.id}}" class="btn btn-sm btn-success me-1">
+                            <i class="fa-solid fa-eye"></i> Ver
+                        </a>
+
+                        <a href="/mascotas/{{m.id}}/edit" class="btn btn-sm btn-warning me-1">
+                            <i class="fa-solid fa-pen"></i> Editar
+                        </a>
+
+                        <form action="/mascotas/{{m.id}}/eliminar" method="post" style="display:inline-block;">
+                            <button type="submit" class="btn btn-sm btn-danger"
+                                onclick="return confirm('¿Seguro que quieres eliminar esta mascota?');">
+                                <i class="fa-solid fa-trash"></i> Eliminar
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+
+        </table>
+    </div>
+
+    <!-- Botón crear -->
+    <div class="text-center mt-4">
+        <a href="/mascotas/nuevo" class="btn btn-primary btn-lg">
+            <i class="fa-solid fa-plus"></i> Crear nueva mascota
+        </a>
+    </div>
+
+    <div class="text-center mt-4">
+        <a href="/" class="btn btn-primary btn-lg">
+            <i class="fa-solid fa-plus"></i> Inicio
+        </a>
+    </div>
+
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>

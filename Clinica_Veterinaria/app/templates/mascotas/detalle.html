@@ -1,24 +1,87 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detalle de mascota registrada</title>
+    <title>Detalle de Mascota</title>
+
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <style>
+        body {
+            background-color: #f6f7fb;
+        }
+
+        .detalle-card {
+            max-width: 600px;
+            margin: 40px auto;
+        }
+
+        .icon-animal {
+            font-size: 60px;
+        }
+    </style>
 </head>
+
 <body>
-    <h1>Detalle de la mascota</h1>
 
-    <div>
-        <div>ID:<span>{{mascota.id}}</span></div>
-        <div>Nombre:<span>{{mascota.nombre}}</span></div>
-        <div>Especie:<span>{{mascota.especie}}</span></div>
-        <div>Raza:<span>{{mascota.raza}}</span></div>
-        <div>Fecha de nacimiento:<span>{{mascota.fecha_nacimiento}}</span></div>
-        <div>Chip:<span>{{mascota.chip}}</span></div>
+<div class="container">
+    <h1 class="text-center my-4">
+        <i class="fa-solid fa-paw"></i> Detalle de la Mascota
+    </h1>
 
-    <br>
+    <div class="card shadow detalle-card">
+        <div class="card-body">
 
-    <a href="/mascotas">Volver a la lista de mascotas</a>
-    
+            <!-- Icono grande según especie -->
+            <div class="text-center mb-3">
+                {% if mascota.especie|lower == "perro" %}
+                    <i class="fa-solid fa-dog text-primary icon-animal"></i>
+                {% elif mascota.especie|lower == "gato" %}
+                    <i class="fa-solid fa-cat text-warning icon-animal"></i>
+                {% elif mascota.especie|lower == "ave" %}
+                    <i class="fa-solid fa-dove text-info icon-animal"></i>
+                {% elif mascota.especie|lower == "reptil" %}
+                    <i class="fa-solid fa-worm text-success icon-animal"></i>
+                {% else %}
+                    <i class="fa-solid fa-paw text-secondary icon-animal"></i>
+                {% endif %}
+            </div>
+
+            <h4 class="text-center mb-4">{{ mascota.nombre }}</h4>
+
+            <ul class="list-group mb-4">
+                <li class="list-group-item"><strong>ID:</strong> {{ mascota.id }}</li>
+                <li class="list-group-item"><strong>Especie:</strong> {{ mascota.especie }}</li>
+                <li class="list-group-item"><strong>Raza:</strong> {{ mascota.raza }}</li>
+                <li class="list-group-item"><strong>Fecha de nacimiento:</strong> {{ mascota.fecha_nacimiento }}</li>
+                <li class="list-group-item">
+                    <strong>Chip:</strong>
+                    {% if mascota.chip is none %}
+                        -
+                    {% elif mascota.chip %}
+                        <span class="badge bg-success"><i class="fa-solid fa-check"></i> Sí</span>
+                    {% else %}
+                        <span class="badge bg-secondary">No</span>
+                    {% endif %}
+                </li>
+            </ul>
+
+            <div class="text-center">
+                <a href="/mascotas" class="btn btn-primary">
+                    <i class="fa-solid fa-arrow-left"></i> Volver al listado
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>
