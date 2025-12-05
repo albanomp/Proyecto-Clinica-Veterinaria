@@ -6,7 +6,7 @@ from sqlalchemy import select
 from app.database import get_db
 from app.models.tratamiento import Tratamiento
 
-templates = Jinja2Templates(directory="app/templates")
+templates = Jinja2Templates(directory="Clinica_veterinaria/app/templates")
 
 router = APIRouter(prefix="/tratamientos", tags=["web"])
 

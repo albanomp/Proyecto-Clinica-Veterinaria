@@ -8,7 +8,7 @@ from app.schemas import duenyo
 from app.database import get_db
 from app.models import Duenyo 
 
-templates = Jinja2Templates(directory="app/templates")
+templates = Jinja2Templates(directory="Clinica_veterinaria/app/templates")
 
 router = APIRouter(prefix="/duenyos", tags=["web_duenyos"])
 

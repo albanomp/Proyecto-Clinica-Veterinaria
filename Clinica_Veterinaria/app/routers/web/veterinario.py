@@ -8,7 +8,7 @@ from app.models import Veterinario
 from app.database import get_db
 
 
-templates= Jinja2Templates(directory="Canciones/app/templates")
+templates= Jinja2Templates(directory="Clinica_veterinaria/app/templates")
 
 router= APIRouter(prefix="/veterinarios",tags=["web"])
 
