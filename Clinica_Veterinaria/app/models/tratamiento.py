@@ -1,4 +1,4 @@
-from sqlalchemy import Integer, String, Boolean
+from sqlalchemy import Integer, String, Boolean, Float
 from sqlalchemy.orm import Mapped, mapped_column
 from app.database import Base
 
@@ -12,3 +12,5 @@ class Tratamiento(Base):
     descripcion: Mapped[str] = mapped_column(String(500), nullable=False)
     duracion: Mapped[str] = mapped_column(String(100), nullable=False)
     ingreso: Mapped[bool] = mapped_column(Boolean, default=False)
+    
+    
