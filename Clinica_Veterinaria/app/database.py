@@ -6,7 +6,7 @@ from sqlalchemy.orm import DeclarativeBase, sessionmaker
 from sqlalchemy import create_engine, select
 
 engine = create_engine(
-    "sqlite:///Mascotas.db",
+    "sqlite:///Clínica.db",
     echo=True,
     connect_args={"check_same_thread": False}
 )
