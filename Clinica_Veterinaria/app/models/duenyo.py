@@ -9,5 +9,5 @@ class Duenyo(Base):
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     nombre: Mapped[str] = mapped_column(String(150), nullable=False)
     telefono: Mapped[str] = mapped_column(String(20), nullable=False)
-    email: Mapped[str | None] = mapped_column(Integer, nullable=True)
+    email: Mapped[str | None] = mapped_column(String, nullable=True)
     direccion: Mapped[str | None] = mapped_column(String, nullable=True)
