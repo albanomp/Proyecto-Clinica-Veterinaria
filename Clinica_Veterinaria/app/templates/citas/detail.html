@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Detalles de Cita</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+
+                <div class="card shadow" style="width: 32rem;">
+                    <div class="card-header bg-info text-white">
+                        <h2 class="card title mb-0">
+                            <i class="fa-solid fa-user"></i> Detalle de la Cita
+                        </h2>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <h5 class="text-body-secondary">ID</h5>
+                                <p class="fs-5">{{cita.id}}</p>
+                        </div>
+                        <hr>
+                        <div class="mb-3">
+                            <h5 class="text-body-secondary">Fecha y hora</h5>
+                            <p class="fs-4 fw-bold">{{cita.fecha_hora}}</p>
+                        </div>
+                        <hr>
+                        <div class="mb-3">
+                            <h5 class="text-body-secondary">Motivo de la cita</h5>
+                            <p class="fs-4 fw-bold">{{cita.motivo}}</p>
+                        </div>
+                        <div class="mb-3">
+                            <h5 class="text-body-secondary">Veterinario</h5>
+                            <p class="fs-4 fw-bold">{{cita.veterinario_id}}</p>
+                        </div>
+                        <hr>
+
+                        <div class="mb-3">
+                            <h5 class="text-body-secondary">Mascota</h5>
+                            <p class="fs-4 fw-bold">{{cita.mascota_id}}</p>
+                        </div>
+                        <hr>
+                    </div>
+
+                    <div class="card-footer">
+                        <a href="/citas" class="btn btn-secondary">
+                            <i class="fa-solid fa-arrow-left"></i> Volver a la lista</a>
+                            <a href="/citas/{{ cita.id}}/edit" class="btn btn-warning me-2">
+                                <i class="fa-solid fa-pen-to-square"></i>Editar
+                            </a>
+                            <form method="post" action="/citas/{{ cita.id }}/delete" style="display: inline" onsubmit="return confirm('¿ Estás seguro de que quieres eliminar esta cita ?');">
+                            <button type="submit" class="btn btn-danger">
+                                <i class="fa-solid fa-trash-can"></i> Eliminar
+                            </button>
+                        </form>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+    
+</body>
+</html>

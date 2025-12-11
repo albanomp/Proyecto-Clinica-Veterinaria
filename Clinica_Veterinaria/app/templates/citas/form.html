@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card shadow">
+                    <div class="card-header bg-primary text-white">
+                        <h2 class="card-fecha_hora mb-0">
+                            <i class="fa-solid fa-{% if cita %}pen-to-square{% else %}plus{% endif %}"></i>
+                            {% if cita %}Editar cita{% else %}Crear nueva cita{% endif %}
+                        </h2>
+                    </div>
+                    <div class="card-body">
+                        {% if errors %}
+                        <div class="alert alert-danger" role="alert">
+                            <h5 class="alert-heading">
+                                <i class="fa-solid fa-triangle-exclamation"></i> Errores de validación:
+                            </h5>
+                            <ul class="mb-0">
+                                {% for error in errors %}
+                                <li>{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        {% endif %}
+
+                        <form method="post" action="{% if cita %}/citas/{{ cita.id }}/edit{% else %}/citas/new{% endif %}">
+                            <div class="mb-3">
+                                <label for="fecha_hora" class="form-label">Fecha y hora <span class="text-danger">*</span></label>
+                                <input
+                                    type="datetime-local"
+                                    class="form-control"
+                                    id="fecha_hora"
+                                    name="fecha_hora"
+                                    value="{% if form_data %}{{ form_data.get('fecha_hora', '') }}{% elif cita %}{{ cita.fecha_hora }}{% endif %}"
+                                    required
+                                    maxlength="200"
+                                >
+                                <div class="form-text">La fecha de la cita tiene el formato dd/mm/YYYY, hh:mm</div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="motivo" class="form-label">Motivo <span class="text-danger">*</span></label>
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    id="motivo"
+                                    name="motivo"
+                                    value="{% if form_data %}{{ form_data.get('motivo', '') }}{% elif cita %}{{ cita.motivo }}{% endif %}"
+                                    required
+                                    maxlength="200"
+                                >
+                                <div class="form-text">El motivo de la cita (máximo 200 caracteres)</div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="veterinario_id" class="form-label">Veterinario<span class="text-danger">*</span></label>
+                                <input
+                                    type="number"
+                                    class="form-control"
+                                    id="veterinario_id"
+                                    name="veterinario_id"
+                                    value="{% if form_data and form_data.get('veterinario_id') %}{{ form_data.get('veterinario_id') }}{% elif cita and cita.veterinario_id is not none %}{{ cita.veterinario_id }}{% endif %}"
+                                    min="0"
+                                    step="1"
+                                    required
+                                >
+                                <div class="form-text">Veterinario asignado para la cita (numero entero positivo)</div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="mascota_id" class="form-label">Mascota<span class="text-danger">*</span></label>
+                                <input
+                                    type="number"
+                                    class="form-control"
+                                    id="mascota_id"
+                                    name="mascota_id"
+                                    value="{% if form_data and form_data.get('mascota_id') %}{{ form_data.get('mascota_id') }}{% elif cita and cita.mascota_id is not none %}{{ cita.mascota_id }}{% endif %}"
+                                    min="0"
+                                    step="1"
+                                    required
+                                >
+                                <div class="form-text">Mascota para la cita (numero entero positivo)</div>
+                            </div>
+
+                            
+
+                            <div class="d-flex justify-content-between">
+                                <a href="/citas" class="btn btn-secondary">
+                                    <i class="fa-solid fa-arrow-left me-2"></i>Cancelar
+                                </a>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fa-solid fa-floppy-disk me-2"></i>{% if cita %}Actualizar{% else %}Crear{% endif %} cita
+                                </button>
+                            </div> 
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+</body>
+</html>
