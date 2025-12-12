@@ -13,6 +13,7 @@ class RespuestaMascota(BaseModel):
     raza: str
     fecha_nacimiento: str
     chip: bool | None
+    duenyo_id: int
     @field_validator("nombre","especie","raza")
     @classmethod
     def validate_not_empty(RespuestaMascota, m:str)->str:
@@ -27,6 +28,7 @@ class CrearMascota(BaseModel):
     raza: str
     fecha_nacimiento: str
     chip: bool | None
+    duenyo_id: int
     @field_validator("nombre","especie","raza")
     @classmethod
     def validate_not_empty(RespuestaMascota, m:str)->str:
@@ -41,6 +43,7 @@ class ActualizarMascota(BaseModel):
     raza: str
     fecha_nacimiento: str
     chip: bool | None
+    duenyo_id: int
     @field_validator("nombre","especie","raza")
     @classmethod
     def validate_not_empty(RespuestaMascota, m:str)->str:
@@ -55,3 +58,4 @@ class ParcheMascota(BaseModel):
     raza: str | None = None
     fecha_nacimiento: str | None = None
     chip: bool | None = None
+    duenyo_id: int | None = None

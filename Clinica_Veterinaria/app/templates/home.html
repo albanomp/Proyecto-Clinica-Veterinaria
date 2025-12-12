@@ -8,6 +8,21 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+    <style>
+        /* Estilos para el enlace 'Ver Cita Registrada' */
+        a.citas-link.btn {
+            color: #6f42c1;
+            border-color: #6f42c1;
+            background-color: transparent;
+        }
+        a.citas-link.btn:hover,
+        a.citas-link.btn:focus {
+            color: #ffffff;
+            background-color: #6f42c1;
+            border-color: #6f42c1;
+            text-decoration: none;
+        }
+    </style>
 </head>
 
 <body>
@@ -96,6 +111,22 @@
                 </a>
 
             </div>
+        </div>
+        <!-- CITAS -->
+        <div class="col-md-6 text-center">
+
+            <h2 style="color: #6f42c1;" class="mb-3">
+                Citas <i class="fa-solid fa-alarm-clock"></i>
+            </h2>
+
+            <a href="/citas" class="btn btn-lg w-100 mb-2" style="background-color: #6f42c1; border-color: #6f42c1; color: white;">
+                Lista de Citas
+            </a>
+
+            <a href="/citas/1" class="btn btn-lg w-100 citas-link">
+                Ver Cita Registrada
+            </a>
+
         </div>
 
     </div>

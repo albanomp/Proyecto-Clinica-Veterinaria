@@ -39,7 +39,8 @@ def create(mascota_dto: CrearMascota,db:Session=Depends(get_db)):
     mascota_dto=Mascota(
         nombre= mascota_dto.nombre.strip(), especie= mascota_dto.especie.strip(), 
         raza= mascota_dto.raza.strip(),fecha_nacimiento= mascota_dto.fecha_nacimiento.strip(), 
-        chip= mascota_dto.chip
+        chip= mascota_dto.chip,
+        duenyo_id=mascota_dto.duenyo_id
         )
     db.add(mascota_dto)
     db.commit()
@@ -82,6 +83,7 @@ def update(id:int, mascota_dto: ActualizarMascota,db:Session=Depends(get_db)):
     mascota_dto.raza= mascota_dto.raza.strip()
     mascota_dto.fecha_nacimiento= mascota_dto.fecha_nacimiento.strip()
     mascota_dto.chip= mascota_dto.chip
+    mascota_dto.duenyo_id = mascota_dto.duenyo_id
     
     db.commit()
     db.refresh(mascota_dto)
@@ -94,7 +96,7 @@ def eliminar_mascota(id: int, db:Session=Depends(get_db)):
      raise HTTPException(status_code=404, detail= "404- Mascota registrada no encontrada")
     db.delete(mascota)
     db.commit()
-    return mascota
+    return None
 
 
 @router.patch("/parchear_mascota", response_model=ParcheMascota)
@@ -125,6 +127,11 @@ def parche(id:int, mascota_dto: ParcheMascota,db:Session=Depends(get_db)):
         if not mascota_dto.fecha_nacimiento.strip():
          raise HTTPException(status_code=400, detail= "La fecha no puede estar vacía")
         mascota.fecha_nacimiento = mascota_dto.fecha_nacimiento.strip()
+    
+    if mascota_dto.duenyo_id is not None:
+        if not mascota_dto.duenyo_id.strip():
+         raise HTTPException(status_code=400, detail= "La fecha no puede estar vacía")# 🔥 OPCIONAL
+        mascota.duenyo_id = mascota_dto.duenyo_id
     
     
     db.commit()

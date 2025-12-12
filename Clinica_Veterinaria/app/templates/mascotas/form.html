@@ -176,6 +176,25 @@
                                 </div>
                             </div>
 
+                             <!-- SELECCIÓN DE DUEÑO -->
+                            <div class="mb-3">
+                                <label class="form-label">Dueño *</label>
+                                <select class="form-select" name="duenyo_id" required>
+                                    <option value="">Seleccione un dueño...</option>
+
+                                    {% for d in duenyos %}
+                                        <option value="{{ d.id }}"
+                                            {% if form_data and form_data.duenyo_id == d.id %}
+                                                selected
+                                            {% elif mascota and mascota.duenyo_id == d.id %}
+                                                selected
+                                            {% endif %}>
+                                            {{ d.nombre }} (ID: {{ d.id }})
+                                        </option>
+                                    {% endfor %}
+                                    </select>
+                            </div>
+
                             <!-- BOTONES -->
                             <hr class="my-4">
 

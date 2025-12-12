@@ -37,7 +37,7 @@
     <div class="card shadow detalle-card">
         <div class="card-body">
 
-            <!-- Icono grande según especie -->
+            <!-- Icono según especie -->
             <div class="text-center mb-3">
                 {% if mascota.especie|lower == "perro" %}
                     <i class="fa-solid fa-dog text-primary icon-animal"></i>
@@ -54,11 +54,13 @@
 
             <h4 class="text-center mb-4">{{ mascota.nombre }}</h4>
 
+            <!-- Datos de la mascota -->
             <ul class="list-group mb-4">
                 <li class="list-group-item"><strong>ID:</strong> {{ mascota.id }}</li>
                 <li class="list-group-item"><strong>Especie:</strong> {{ mascota.especie }}</li>
                 <li class="list-group-item"><strong>Raza:</strong> {{ mascota.raza }}</li>
                 <li class="list-group-item"><strong>Fecha de nacimiento:</strong> {{ mascota.fecha_nacimiento }}</li>
+
                 <li class="list-group-item">
                     <strong>Chip:</strong>
                     {% if mascota.chip is none %}
@@ -71,11 +73,31 @@
                 </li>
             </ul>
 
+            <!-- Datos del dueño -->
+            <div class="card mb-4">
+                <div class="card-body">
+
+                    <h5 class="mb-3"><i class="fa-solid fa-user"></i> Dueño</h5>
+
+                    {% if mascota.duenyo %}
+                        <p><strong>Nombre:</strong> {{ mascota.duenyo.nombre }}</p>
+
+                        <a href="/duenyos/{{ mascota.duenyo.id }}" class="btn btn-outline-primary">
+                            <i class="fa-solid fa-user"></i> Ver información del dueño
+                        </a>
+
+                    {% else %}
+                        <p class="text-danger">Esta mascota no tiene un dueño asignado.</p>
+                    {% endif %}
+                </div>
+            </div>
+
             <div class="text-center">
                 <a href="/mascotas" class="btn btn-primary">
                     <i class="fa-solid fa-arrow-left"></i> Volver al listado
                 </a>
             </div>
+
         </div>
     </div>
 </div>

@@ -30,6 +30,6 @@ def detalle_tratamiento(tratamiento_id: int, request: Request, db: Session = Dep
         raise HTTPException(status_code=404, detail="404 - Tratamiento no encontrado")
 
     return templates.TemplateResponse(
-        "tratamientos/detalle.html",
+        "tratamientos/detail.html",
         {"request": request, "tratamiento": tratamiento}
     )

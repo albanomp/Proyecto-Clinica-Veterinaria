@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listado de Citas</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+</head>
+
+<body>
+    <div class="container mt-5">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1>Listado de citas <i class="fa-regular fa-alarm-clock"></i><i class="fa-solid fa-paw"></i></h1>
+            <a href="/citas/new" class="btn btn-primary">
+                <i class="fa-solid fa-plus"></i>
+                Nueva cita
+            </a>
+        </div>
+        
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Fecha-Hora</th>
+                    <th>Motivo</th>
+                    <th>Veterinario</th>
+                    <th>Mascota</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for cita in citas %}
+                <tr>
+                    <td>{{ cita.id }}</td>
+                    <td>{{ cita.fecha_hora}}</td>
+                    <td>{{ cita.motivo}}</td>
+                    <td>{{ cita.veterinario_id}}</td>
+                    <td>{{ cita.mascota_id}}</td>
+                    <td class="d-flex align-items-center">
+                        <a href="/citas/{{cita.id}}" class="btn btn-info me-4">
+                            <i class="fa-solid fa-eye"></i> Ver
+                        </a>
+                        <a href="/citas/{{ cita.id }}/edit" class="btn btn-warning me-4">
+                            <i class="fa-solid fa-pen-to-square"></i> Editar
+                        </a>
+                        <form method="post" action="/citas/{{ cita.id}}/delete" class="d-inline" onsubmit="return confirm('¿ Estas seguro de que quieres eliminar esta cita ?');">
+                            <button type="submit" class="btn btn-danger">
+                                <i class="fa-solid fa-trash-can"></i>
+                                Eliminar
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor%}
+            </tbody>
+
+        </table>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+</body>
+</html>
