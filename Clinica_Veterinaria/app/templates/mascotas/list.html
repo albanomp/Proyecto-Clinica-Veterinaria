@@ -57,6 +57,7 @@
                     <th>Raza</th>
                     <th>Fecha de Nacimiento</th>
                     <th>Chip</th>
+                    <th>Dueño</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
@@ -95,6 +96,8 @@
                             <span class="badge bg-secondary">No</span>
                         {% endif %}
                     </td>
+                    <td>{{ m.duenyo.nombre if m.duenyo else "Sin dueño" }}</td>
+
 
                     <td>
                         <a href="/mascotas/{{m.id}}" class="btn btn-sm btn-success me-1">
