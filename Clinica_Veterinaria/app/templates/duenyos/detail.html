@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>👤Detalle del dueño</title>
+    <title>👤 Detalle del dueño</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
@@ -14,15 +14,16 @@
         <div class="row justify-content-center">
             <div class="col-md-8">
 
-                <div class="card shadow" style="width: 32rem;">
+                <div class="card shadow">
                     <div class="card-header bg-info text-white">
                         <h2 class="card-title mb-0">
-                            <i class="fa-solid fa-user"></i>Detalle del dueño
+                            <i class="fa-solid fa-user"></i> Detalle del dueño
                         </h2>
                     </div>
 
                     <div class="card-body">
 
+                        <!-- DATOS DEL DUEÑO -->
                         <div class="mb-3">
                             <h5 class="text-body-secondary">ID</h5>
                             <p class="fs-5">{{ duenyo.id }}</p>
@@ -31,25 +32,13 @@
 
                         <div class="mb-3">
                             <h5 class="text-body-secondary">Nombre</h5>
-                            <p class="fs-4 fw-bold">{{ duenyo.nombre }}</p>
+                            <p class="fs-4 fw-bold">{{ duenyo.nombre }} {{ duenyo.apellido }}</p>
                         </div>
                         <hr>
 
                         <div class="mb-3">
                             <h5 class="text-body-secondary">Teléfono</h5>
                             <p class="fs-5">{{ duenyo.telefono }}</p>
-                        </div>
-                        <hr>
-
-                        <div class="mb-3">
-                            <h5 class="text-body-secondary">Email</h5>
-                            <p class="fs-5">
-                                {% if duenyo.email %}
-                                    {{ duenyo.email }}
-                                {% else %}
-                                    <span class="text-body-secondary">No especificado</span>
-                                {% endif %}
-                            </p>
                         </div>
                         <hr>
 
@@ -64,13 +53,41 @@
                             </p>
                         </div>
 
+                        <hr>
+
+                        <!-- ⭐ LISTA DE MASCOTAS DEL DUEÑO -->
+                        <div class="mt-4">
+                            <h4 class="text-primary mb-3">
+                                <i class="fa-solid fa-paw"></i> Mascotas del dueño
+                            </h4>
+
+                            {% if mascotas and mascotas|length > 0 %}
+                                <ul class="list-group">
+                                    {% for mascota in mascotas %}
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        <span>
+                                            <strong>{{ mascota.nombre }}</strong> ({{ mascota.especie }})
+                                        </span>
+                                        <a href="/mascotas/{{ mascota.id }}" class="btn btn-outline-primary btn-sm">
+                                            Ver mascota
+                                        </a>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            {% else %}
+                                <p class="text-secondary fst-italic">Este dueño no tiene mascotas registradas.</p>
+                            {% endif %}
+                        </div>
+
                     </div>
 
                     <div class="card-footer">
                         <a href="/duenyos" class="btn btn-secondary">
-                            <i class="fa-solid fa-arrow-left"></i> Volver a la lista</a>
+                            <i class="fa-solid fa-arrow-left"></i> Volver a la lista
+                        </a>
                         <a href="/duenyos/{{ duenyo.id }}/edit" class="btn btn-primary">
-                            <i class="fa-solid fa-pen-to-square"></i> Editar</a>
+                            <i class="fa-solid fa-pen-to-square"></i> Editar
+                        </a>
                     </div>
 
                 </div>
