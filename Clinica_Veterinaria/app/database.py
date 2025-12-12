@@ -32,9 +32,22 @@ def init_db():
 
     db = Sessionlocal()
     try:
-       
+        duenyos = db.execute(select(Duenyo)).scalars().all()
         veterinarios = db.execute(select(Veterinario)).scalars().all()
         mascotas = db.execute(select(Mascota)).scalars().all()
+        
+        if not duenyos:
+            default_duenos = [
+                Duenyo(nombre="Paola", telefono="612345678", email="paola80@gmail.com", direccion="Calle Los Olivos 23"),
+                Duenyo(nombre="Carlos", telefono="678912345", email="carlos79@gmail.com", direccion="Av. Gran Canaria 45"),
+                Duenyo(nombre="Lucía", telefono="698745632", email="lucia98@gmail.com", direccion="Calle San Sebastián 12"),
+                Duenyo(nombre="Kevin", telefono="657893221", email="kevin91@gmail.com", direccion="Calle Jerusalén 66"),
+                Duenyo(nombre="Samira", telefono="676356579", email="samira_93@gmail.com", direccion="Av.del Cabildo 57"),
+                Duenyo(nombre="Roberto", telefono="722345987", email="roberto@gmail.com", direccion="Calle Hebanista 34"),
+                Duenyo(nombre="Antonia", telefono="928576576", email="", direccion=""),
+            ]
+            db.add_all(default_duenos)
+            db.commit()
 
         if not veterinarios:
             default_vets = [
@@ -48,32 +61,19 @@ def init_db():
 
         if not mascotas:
             default_mascotas = [
-                Mascota(nombre="Alejandro", especie="tortuga", raza="estrellada", fecha_nacimiento="11-09-2001", chip=True),
-                Mascota(nombre="Balboa", especie="Perro", raza="Pastor alemán", fecha_nacimiento="28-11-2018", chip=False),
-                Mascota(nombre="Carlos", especie="Ave", raza="Grajilla", fecha_nacimiento="16-03-2021", chip=True),
-                Mascota(nombre="Deme", especie="Reptil", raza="Serpiente Boa", fecha_nacimiento="7-01-2016", chip=False),
-                Mascota(nombre="Elena", especie="Gato", raza="negro", fecha_nacimiento="17-07-2023", chip=True),
-                Mascota(nombre="Fabricio", especie="Ave", raza="Pájaro Carpintero", fecha_nacimiento="19-09-2024", chip=True),
-                Mascota(nombre="Gabriel", especie="Reptil", raza="Dragón de Komodo", fecha_nacimiento="30-08-2015", chip=False),
+            Mascota(nombre="Alejandro",especie="tortuga",raza= "estrellada", fecha_nacimiento= "11-09-2001", chip=True, duenyo_id=default_duenos[0].id),
+            Mascota(nombre="Balboa",especie="Perro",raza= "Pastor alemán", fecha_nacimiento= "28-11-2018", chip=False, duenyo_id=default_duenos[2].id),
+            Mascota(nombre="Carlos",especie="Ave",raza= "Grajilla", fecha_nacimiento= "16-03-2021", chip=True,  duenyo_id=default_duenos[1].id),
+            Mascota(nombre="Deme",especie="Reptil",raza= "Serpiente Boa", fecha_nacimiento= "7-01-2016", chip=False, duenyo_id=default_duenos[1].id),
+            Mascota(nombre="Elena",especie="Gato",raza= "negro", fecha_nacimiento= "17-07-2023", chip=True, duenyo_id=default_duenos[3].id),
+            Mascota(nombre="Fabricio",especie="Ave",raza= "Pájaro Carpintero", fecha_nacimiento= "19-09-2024", chip=True, duenyo_id=default_duenos[4].id),
+            Mascota(nombre="Gabriel",especie="Reptil",raza= "Dragón de Komodo", fecha_nacimiento= "30-08-2015", chip=False, duenyo_id=default_duenos[5].id),
             ]
             db.add_all(default_mascotas)
             db.commit()
 
-     
-        duenyos = db.execute(select(Duenyo)).scalars().all()
 
-        if not duenyos:
-            default_duenos = [
-                Duenyo(nombre="Paola", telefono="612345678", email="paola80@gmail.com", direccion="Calle Los Olivos 23"),
-                Duenyo(nombre="Carlos", telefono="678912345", email="carlos79@gmail.com", direccion="Av. Gran Canaria 45"),
-                Duenyo(nombre="Lucía", telefono="698745632", email="lucia98@gmail.com", direccion="Calle San Sebastián 12"),
-                Duenyo(nombre="Kevin", telefono="657893221", email="kevin91@gmail.com", direccion="Calle Jerusalén 66"),
-                Duenyo(nombre="Samira", telefono="676356579", email="samira_93@gmail.com", direccion="Av.del Cabildo 57"),
-                Duenyo(nombre="Roberto", telefono="722345987", email="roberto@gmail.com", direccion="Calle Hebanista 34"),
-                Duenyo(nombre="Antonia", telefono="928576576", email="", direccion=""),
-            ]
-            db.add_all(default_duenos)
-            db.commit()
+        
 
 
         tratamientos = db.execute(select(Tratamiento)).scalars().all()
