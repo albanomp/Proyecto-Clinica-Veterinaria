@@ -2,34 +2,32 @@ from fastapi import APIRouter, Depends, Form, HTTPException, Request
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy import select
-from sqlalchemy.orm import Session
-
-from app.models import Mascota
+from sqlalchemy.orm import Session, selectinload
+from app.models import Mascota, Duenyo
 from app.database import get_db
 
 
-templates = Jinja2Templates(directory="Clinica_veterinaria/app/templates")
+templates = Jinja2Templates(directory="Canciones/app/templates")
 
 router = APIRouter(prefix="/mascotas", tags=["web"])
 
 
 @router.get("/", response_class=HTMLResponse)
 def lista_mascota(request: Request, db: Session = Depends(get_db)):
-    mascotas = db.execute(select(Mascota)).scalars().all()
+    mascotas = db.execute(select(Mascota).options(selectinload(Mascota.duenyo))).scalars().all()
     return templates.TemplateResponse(
         "mascotas/list.html",
         {"request": request, "mascotas": mascotas}
     )
 
 
-
 @router.get("/nuevo", response_class=HTMLResponse)
-def show_create_form(request: Request):
+def show_create_form(request: Request, db: Session = Depends(get_db)):
+    duenyos = db.execute(select(Duenyo)).scalars().all()
     return templates.TemplateResponse(
         "mascotas/form.html",
-        {"request": request}
+        {"request": request, "duenyos": duenyos}
     )
-
 
 @router.post("/nuevo", response_class=HTMLResponse)
 def crear_mascota(
@@ -39,6 +37,7 @@ def crear_mascota(
     raza: str = Form(...),
     fecha_nacimiento: str = Form(...),
     chip: str = Form(""),
+    duenyo_id: int = Form(...),
     db: Session = Depends(get_db)
 ):
     errors = []
@@ -47,7 +46,8 @@ def crear_mascota(
         "especie": especie,
         "raza": raza,
         "fecha_nacimiento": fecha_nacimiento,
-        "chip": chip
+        "chip": chip,
+        "duenyo_id": duenyo_id
     }
 
     chip_value = None
@@ -64,11 +64,15 @@ def crear_mascota(
         errors.append("La raza es obligatoria")
     if not fecha_nacimiento.strip():
         errors.append("La fecha de nacimiento es obligatoria")
+    
+    duenyo = db.execute(select(Duenyo).where(Duenyo.id == duenyo_id)).scalar_one_or_none()
+    if not duenyo:
+        errors.append("El dueño seleccionado no existe")
 
     if errors:
         return templates.TemplateResponse(
             "mascotas/form.html",
-            {"request": request, "mascota": None, "errors": errors, "form_data": form_data}
+            {"request": request, "mascota": None, "errors": errors, "form_data": form_data, "duenyos": duenyos}
         )
 
     try:
@@ -77,7 +81,9 @@ def crear_mascota(
             especie=especie.strip(),
             raza=raza.strip(),
             fecha_nacimiento=fecha_nacimiento.strip(),
-            chip=chip_value
+            chip=chip_value,
+            duenyo_id=duenyo_id
+
         )
         db.add(mascota)
         db.commit()
@@ -86,9 +92,10 @@ def crear_mascota(
     except Exception as e:
         db.rollback()
         errors.append(f"Error al crear la mascota: {str(e)}")
+        duenyos = db.execute(select(Duenyo)).scalars().all()
         return templates.TemplateResponse(
             "mascotas/form.html",
-            {"request": request, "mascota": None, "errors": errors, "form_data": form_data}
+            {"request": request, "mascota": None, "errors": errors, "form_data": form_data, "duenyos": duenyos}
         )
 
 
@@ -99,10 +106,12 @@ def show_edit_form(request: Request, mascota_id: int, db: Session = Depends(get_
 
     if mascota is None:
         raise HTTPException(status_code=404, detail="404 - Mascota no encontrada")
+    
+    duenyos = db.execute(select(Duenyo)).scalars().all()
 
     return templates.TemplateResponse(
         "mascotas/form.html",
-        {"request": request, "mascota": mascota}
+        {"request": request, "mascota": mascota, "duenyos": duenyos}
     )
 
 
@@ -115,6 +124,7 @@ def update_mascota(
     raza: str = Form(...),
     fecha_nacimiento: str = Form(...),
     chip: str = Form(""),
+    duenyo_id: int = Form(...),
     db: Session = Depends(get_db)
 ):
     mascota = db.execute(select(Mascota).where(Mascota.id == mascota_id)).scalar_one_or_none()
@@ -127,7 +137,8 @@ def update_mascota(
         "especie": especie,
         "raza": raza,
         "fecha_nacimiento": fecha_nacimiento,
-        "chip": chip
+        "chip": chip,
+        "duenyo_id": duenyo_id
     }
 
     chip_value = None
@@ -144,11 +155,16 @@ def update_mascota(
         errors.append("La raza es obligatoria")
     if not fecha_nacimiento.strip():
         errors.append("La fecha de nacimiento es obligatoria")
+    
+    duenyo = db.execute(select(Duenyo).where(Duenyo.id == duenyo_id)).scalar_one_or_none()
+    if not duenyo:
+        errors.append("El dueño seleccionado no existe")
 
     if errors:
+        duenyos = db.execute(select(Duenyo)).scalars().all()
         return templates.TemplateResponse(
             "mascotas/form.html",
-            {"request": request, "mascota": None, "errors": errors, "form_data": form_data}
+            {"request": request, "mascota": None, "errors": errors, "form_data": form_data, "duenyos": duenyos}
         )
 
     try:
@@ -157,6 +173,7 @@ def update_mascota(
         mascota.raza = raza.strip()
         mascota.fecha_nacimiento = fecha_nacimiento.strip()
         mascota.chip = chip_value
+        mascota.duenyo_id = duenyo_id
 
         db.commit()
         db.refresh(mascota)
@@ -164,16 +181,17 @@ def update_mascota(
     except Exception as e:
         db.rollback()
         errors.append(f"Error al actualizar la mascota: {str(e)}")
+        duenyos = db.execute(select(Duenyo)).scalars().all()
         return templates.TemplateResponse(
             "mascotas/form.html",
-            {"request": request, "mascota": None, "errors": errors, "form_data": form_data}
+            {"request": request, "mascota": None, "errors": errors, "form_data": form_data, "duenyos": duenyos}
         )
 
 
 
 @router.get("/{mascota_id}", response_class=HTMLResponse)
 def detalle_mascota(mascota_id: int, request: Request, db: Session = Depends(get_db)):
-    mascota = db.execute(select(Mascota).where(Mascota.id == mascota_id)).scalar_one_or_none()
+    mascota = db.execute(select(Mascota).options(selectinload(Mascota.duenyo)).where(Mascota.id == mascota_id)).scalar_one_or_none()
     if mascota is None:
         raise HTTPException(status_code=404, detail="404 - Mascota no registrada")
     return templates.TemplateResponse(
@@ -195,4 +213,4 @@ def eliminar_mascota(request: Request, mascota_id: int, db: Session = Depends(ge
     except Exception as e:
         db.rollback()
         raise HTTPException(status_code=500, detail=f"Error al eliminar la mascota: {str(e)}")
-
+    
