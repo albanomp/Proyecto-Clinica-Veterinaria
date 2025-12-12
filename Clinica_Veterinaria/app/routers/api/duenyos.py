@@ -1,8 +1,10 @@
 from fastapi import Depends, HTTPException, status, APIRouter
 from sqlalchemy import select
 from sqlalchemy.orm import Session
+
 from app.database import get_db
 from app.models.duenyo import Duenyo
+from app.models.mascota import Mascota   # ⭐ IMPORTANTE
 from app.schemas.duenyo import (
     DuenyoResponse,
     DuenyoCreate,
@@ -17,6 +19,7 @@ router = APIRouter(prefix="/api/duenyos", tags=["duenyos"])
 def find_all(db: Session = Depends(get_db)):
     return db.execute(select(Duenyo)).scalars().all()
 
+
 @router.get("/{id}", response_model=DuenyoResponse)
 def find_by_id(id: int, db: Session = Depends(get_db)):
     duenyo = db.execute(
@@ -29,6 +32,26 @@ def find_by_id(id: int, db: Session = Depends(get_db)):
             detail=f"No se ha encontrado el dueño con id {id}"
         )
     return duenyo
+
+
+# ⭐⭐⭐ NUEVA RUTA PARA LA RELACIÓN ⭐⭐⭐
+@router.get("/{id}/mascotas")
+def get_mascotas_by_duenyo(id: int, db: Session = Depends(get_db)):
+    duenyo = db.execute(select(Duenyo).where(Duenyo.id == id)).scalar_one_or_none()
+
+    if not duenyo:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"No existe el dueño con id {id}"
+        )
+
+    mascotas = db.execute(
+        select(Mascota).where(Mascota.duenyo_id == id)
+    ).scalars().all()
+
+    return mascotas
+# ⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐
+
 
 @router.post("", response_model=DuenyoResponse, status_code=status.HTTP_201_CREATED)
 def create(duenyo_dto: DuenyoCreate, db: Session = Depends(get_db)):
@@ -44,6 +67,7 @@ def create(duenyo_dto: DuenyoCreate, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(duenyo)
     return duenyo
+
 
 @router.put("/{id}", response_model=DuenyoResponse)
 def update_full(id: int, duenyo_dto: DuenyoUpdate, db: Session = Depends(get_db)):
@@ -67,6 +91,7 @@ def update_full(id: int, duenyo_dto: DuenyoUpdate, db: Session = Depends(get_db)
     db.refresh(duenyo)
     return duenyo
 
+
 @router.patch("/{id}", response_model=DuenyoResponse)
 def update_partial(id: int, duenyo_dto: DuenyoPatch, db: Session = Depends(get_db)):
 
@@ -88,6 +113,7 @@ def update_partial(id: int, duenyo_dto: DuenyoPatch, db: Session = Depends(get_d
     db.commit()
     db.refresh(duenyo)
     return duenyo
+
 
 @router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete(id: int, db: Session = Depends(get_db)):
