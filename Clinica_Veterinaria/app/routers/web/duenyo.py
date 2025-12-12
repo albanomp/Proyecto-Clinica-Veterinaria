@@ -6,7 +6,8 @@ from sqlalchemy import select
 
 from app.schemas import duenyo
 from app.database import get_db
-from app.models import Duenyo 
+from app.models import Duenyo
+from app.models.mascota import Mascota   # ⬅ IMPORTANTE: añadimos Mascota
 
 templates = Jinja2Templates(directory="Clinica_veterinaria/app/templates")
 
@@ -64,9 +65,9 @@ def create_duenyo(
             direccion=direccion.strip() if direccion else None
         )
 
-        db.add(duenyo)
+        db.add(dueno)
         db.commit()
-        db.refresh(duenyo)
+        db.refresh(dueno)
 
         return RedirectResponse(url=f"/duenyos/{dueno.id}", status_code=303)
 
@@ -85,9 +86,18 @@ def dueno_detail(request: Request, duenyo_id: int, db: Session = Depends(get_db)
     if dueno is None:
         raise HTTPException(status_code=404, detail="Dueño no encontrado")
 
+    # ⭐ OBTENER LAS MASCOTAS QUE PERTENECEN A ESTE DUEÑO
+    mascotas = db.execute(
+        select(Mascota).where(Mascota.duenyo_id == duenyo_id)
+    ).scalars().all()
+
     return templates.TemplateResponse(
         "duenyos/detail.html",
-        {"request": request, "duenyo": dueno}
+        {
+            "request": request,
+            "duenyo": dueno,
+            "mascotas": mascotas   # ⭐ PASAMOS LA LISTA DE MASCOTAS
+        }
     )
 
 @router.get("/{duenyo_id}/edit", response_class=HTMLResponse)
@@ -137,9 +147,9 @@ def update_duenyo(
         dueno.direccion = direccion.strip() if direccion else None
 
         db.commit()
-        db.refresh(duenyo)
+        db.refresh(dueno)
 
-        return RedirectResponse(url=f"/duenyos/{duenyo.id}", status_code=303)
+        return RedirectResponse(url=f"/duenyos/{dueno.id}", status_code=303)
 
     except Exception as e:
         db.rollback()
