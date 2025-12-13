@@ -7,7 +7,6 @@ from app.schemas.cita import CitaResponse, CitaCreate, CitaUpdate, CitaPatch
 __all__=["RespuestaMascota", "CrearMascota", "ParcheMascota", "ActualizarMascota", "RespuestaVeterinario", "CrearVeterinario", "ParcheVeterinario",
         "ActualizarVeterinario", "DuenyoResponse", "DuenyoCreate", "DuenyoUpdate", "DuenyoPatch", "TipoTratamiento", "TratamientoCreate",
         "TratamientoUpdate", "TratamientoPatch", "TratamientoResponse", "CitaResponse", "CitaCreate", "CitaUpdate", "CitaPatch"
-        ,"CitaResponse",  "CitaCreate", "CitaUpdate", "CitaPatch"
         ]
 
 
