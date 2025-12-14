@@ -12,19 +12,19 @@ router= APIRouter(prefix="/veterinarios",tags=["web"])
 
 @router.get("/", response_class=HTMLResponse)
 def lista_empleado(request: Request, db:Session = Depends(get_db)):
-   veterinarios = db.execute(select(Veterinario)).scalars().all()
-   return templates.TemplateResponse(
-       "veterinarios/list.html",
-       {"request":request, "veterinarios":veterinarios}
-       
-   )
+    veterinarios = db.execute(select(Veterinario)).scalars().all()
+    return templates.TemplateResponse(
+        "veterinarios/list.html",
+        {"request":request, "veterinarios":veterinarios}
+        
+    )
 
 @router.get("/formulario", response_class=HTMLResponse)
 def show_create_form(request: Request):
-   return templates.TemplateResponse(
-       "veterinarios/form.html",
-       {"request":request}
-   )
+    return templates.TemplateResponse(
+        "veterinarios/form.html",
+        {"request":request}
+    )
 
 @router.post("/formulario",response_class=HTMLResponse)
 def crear_veterinario(
@@ -150,14 +150,14 @@ def update_empleado(
 
 @router.get("/{veterinario_id}", response_class=HTMLResponse)
 def lista_mascota(veterinario_id: int, request: Request, db:Session = Depends(get_db)):
-   veterinario= db.execute(select(Veterinario).where(Veterinario.id == veterinario_id)).scalar_one_or_none()
-   if veterinario is None:
-       raise HTTPException(status_code=404, detail= "404 - veterinario no registrado")
-   return templates.TemplateResponse(
-       "veterinarios/detalle.html",
-       {"request":request, "veterinario":veterinario}
-       
-   )
+    veterinario= db.execute(select(Veterinario).where(Veterinario.id == veterinario_id)).scalar_one_or_none()
+    if veterinario is None:
+        raise HTTPException(status_code=404, detail= "404 - veterinario no registrado")
+    return templates.TemplateResponse(
+        "veterinarios/detalle.html",
+        {"request":request, "veterinario":veterinario}
+        
+    )
 
 
 @router.post("/{veterinario_id}/eliminar", response_class=HTMLResponse)
