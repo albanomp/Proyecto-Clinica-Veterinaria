@@ -2,6 +2,7 @@
 Configuración de la base de datos
 """
 
+from datetime import datetime
 from sqlalchemy.orm import DeclarativeBase, sessionmaker
 from sqlalchemy import create_engine, select
 
@@ -25,9 +26,9 @@ class Base(DeclarativeBase):
 
 def init_db():
     
-    from app.models import Mascota, Veterinario, Duenyo, Tratamiento
+    from app.models import Mascota, Veterinario, Duenyo, Tratamiento, Cita
 
-   
+
     Base.metadata.create_all(engine)
 
     db = Sessionlocal()
@@ -35,6 +36,8 @@ def init_db():
         duenyos = db.execute(select(Duenyo)).scalars().all()
         veterinarios = db.execute(select(Veterinario)).scalars().all()
         mascotas = db.execute(select(Mascota)).scalars().all()
+        citas = db.execute(select(Cita)).scalars().all()
+
         
         if not duenyos:
             default_duenos = [
@@ -107,6 +110,29 @@ def init_db():
             ]
             db.add_all(default_tr)
             db.commit()
+
+        if not citas:
+
+            default_citas = [
+                Cita( fecha_hora=datetime(2025, 12, 14, 10, 30),motivo="Vacunación",
+                veterinario_id=1, mascota_id=3),
+                Cita( fecha_hora=datetime(2025, 12, 23, 11, 00),motivo="Revisión",
+                veterinario_id=2, mascota_id=1),
+                Cita( fecha_hora=datetime(2025, 12, 21, 9, 30),motivo="Vacunación",
+                veterinario_id=2, mascota_id=4),
+                Cita( fecha_hora=datetime(2025, 12, 16, 10, 30),motivo="Visita Inicial",
+                veterinario_id=2, mascota_id=2),
+                Cita( fecha_hora=datetime(2025, 12, 17, 10, 30),motivo="Tratamoento",
+                veterinario_id=2, mascota_id=5),
+                Cita( fecha_hora=datetime(2025, 12, 19, 9, 30),motivo="Vacunación",
+                veterinario_id=1, mascota_id=6),
+                Cita( fecha_hora=datetime(2025, 12, 19, 12, 30),motivo="Vacunación",
+                veterinario_id=1, mascota_id=8)
+
+            ]
+            db.add_all(default_citas)
+            db.commit()
+
 
     finally:
         db.close()
