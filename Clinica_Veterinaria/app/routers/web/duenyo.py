@@ -1,5 +1,5 @@
-from fastapi.templating import Jinja2Templates
 from fastapi import APIRouter, Form, HTTPException, Request, Depends
+from app.templates import templates
 from fastapi.responses import HTMLResponse, RedirectResponse
 from sqlalchemy.orm import Session
 from sqlalchemy import select
@@ -8,8 +8,6 @@ from app.schemas import duenyo
 from app.database import get_db
 from app.models import Duenyo
 from app.models.mascota import Mascota   # ⬅ IMPORTANTE: añadimos Mascota
-
-templates = Jinja2Templates(directory="Clinica_veterinaria/app/templates")
 
 router = APIRouter(prefix="/duenyos", tags=["web_duenyos"])
 

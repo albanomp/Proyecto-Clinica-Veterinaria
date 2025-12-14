@@ -1,14 +1,12 @@
 from fastapi import APIRouter, Depends, Form, HTTPException, Request
 from fastapi.responses import HTMLResponse, RedirectResponse
-from fastapi.templating import Jinja2Templates
+from app.templates import templates
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.models import Veterinario
 from app.database import get_db
 
-
-templates= Jinja2Templates(directory="Clinica_veterinaria/app/templates")
 
 router= APIRouter(prefix="/veterinarios",tags=["web"])
 
