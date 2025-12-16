@@ -19,4 +19,4 @@ class Mascota(Base):
     chip: Mapped[bool | None] = mapped_column(Boolean, nullable=True)
     duenyo_id: Mapped[int] = mapped_column(ForeignKey("duenyos.id"), nullable=False)
     duenyo: Mapped["Duenyo"] = relationship(back_populates="mascotas")
-    citas: Mapped[List["Cita"]] = relationship(back_populates="mascota")
+    citas: Mapped[List["Cita"]] = relationship(back_populates="mascota", cascade="all, delete-orphan")

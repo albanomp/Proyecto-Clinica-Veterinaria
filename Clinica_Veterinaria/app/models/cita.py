@@ -8,6 +8,7 @@ from app.database import Base
 
 if TYPE_CHECKING:
     from .veterinario import Veterinario
+    from .mascota import Mascota
 
 class Cita(Base):
     __tablename__ = "citas" # nombre de la tabla en bd
@@ -23,5 +24,5 @@ class Cita(Base):
     veterinario: Mapped["Veterinario"] = relationship(back_populates="citas")
     #veterinario_id: Mapped[int] = mapped_column(Integer, nullable=False)
     # requerido
-    mascota_id: Mapped[int] = mapped_column(ForeignKey("mascotas.id"), nullable=False)
+    mascota_id: Mapped[int] = mapped_column(ForeignKey("mascotas.id", ondelete="Cascade"), nullable=False)
     mascota: Mapped["Mascota"] = relationship(back_populates="citas")

@@ -3,7 +3,7 @@ from fastapi.responses import HTMLResponse, RedirectResponse
 from app.templates import templates
 from sqlalchemy import select
 from sqlalchemy.orm import Session, selectinload
-from app.models import Mascota, Duenyo
+from app.models import Mascota, Duenyo, Cita
 from app.database import get_db
 
 
