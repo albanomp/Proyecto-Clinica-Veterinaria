@@ -19,8 +19,8 @@
             <div class="card shadow">
                 <div class="card-header bg-primary text-white">
                     <h2 class="card-title mb-0">
-                        <i class="fa-solid fa-{% if owner %}pen-to-square{% else %}plus{% endif %}"></i>
-                        {% if owner %}Editar Dueño{% else %}Crear Dueño{% endif %}
+                        <i class="fa-solid fa-{% if dueno %}pen-to-square{% else %}plus{% endif %}"></i>
+                        {% if dueno %}Editar Dueño{% else %}Crear Dueño{% endif %}
                     </h2>
                 </div>
 
@@ -37,7 +37,7 @@
                     </div>
                     {% endif %}
 
-                    <form method="post" action="{% if owner %}/owners/{{ owner.id }}/edit{% else %}/owners/new{% endif %}">
+                    <form method="post" action="{% if dueno %}/duenyos/{{ dueno.id }}/edit{% else %}/duenyos/new{% endif %}">
 
                         <div class="mb-3">
                             <label class="form-label">Nombre <span class="text-danger">*</span></label>
@@ -46,7 +46,7 @@
                                 class="form-control"
                                 name="name"
                                 required
-                                value="{% if form_data %}{{ form_data.get('name') }}{% elif owner %}{{ owner.name }}{% endif %}">
+                                value="{% if form_data %}{{ form_data.get('name') }}{% elif dueno %}{{ dueno.name }}{% endif %}">
                         </div>
                         
                         <div class="mb-3">
@@ -55,7 +55,7 @@
                                 type="text" 
                                 class="form-control"
                                 name="address"
-                                value="{% if form_data %}{{ form_data.get('address') }}{% elif owner %}{{ owner.address }}{% endif %}">
+                                value="{% if form_data %}{{ form_data.get('address') }}{% elif dueno %}{{ dueno.address }}{% endif %}">
                         </div>
 
                         <div class="mb-3">
@@ -64,7 +64,7 @@
                                 type="text" 
                                 class="form-control"
                                 name="phone"
-                                value="{% if form_data %}{{ form_data.get('phone') }}{% elif owner %}{{ owner.phone }}{% endif %}">
+                                value="{% if form_data %}{{ form_data.get('phone') }}{% elif dueno %}{{ dueno.phone }}{% endif %}">
                         </div>
 
                         <div class="mb-3">
@@ -73,17 +73,17 @@
                                 type="email" 
                                 class="form-control"
                                 name="email"
-                                value="{% if form_data %}{{ form_data.get('email') }}{% elif owner %}{{ owner.email }}{% endif %}">
+                                value="{% if form_data %}{{ form_data.get('email') }}{% elif dueno %}{{ dueno.email }}{% endif %}">
                         </div>
 
                         <div class="d-flex justify-content-between">
-                            <a href="/owners" class="btn btn-secondary">
+                            <a href="/duenyos" class="btn btn-secondary">
                                 <i class="fa-solid fa-arrow-left"></i> Cancelar
                             </a>
 
                             <button type="submit" class="btn btn-primary">
                                 <i class="fa-solid fa-floppy-disk"></i>
-                                {% if owner %}Actualizar{% else %}Crear{% endif %}
+                                {% if dueno %}Actualizar{% else %}Crear{% endif %}
                             </button>
                         </div>
 
