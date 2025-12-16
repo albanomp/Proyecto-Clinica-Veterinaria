@@ -31,22 +31,22 @@ def show_create_form(request: Request):
 def create_duenyo(
     request: Request,
     nombre: str = Form(...),
-    apellido: str = Form(...),
-    telefono: str = Form(None),
+    telefono: str = Form(...),
+    email: str = Form(None),
     direccion: str = Form(None),
     db: Session = Depends(get_db)
 ):
     errors = []
     form_data = {
         "nombre": nombre,
-        "apellido": apellido,
         "telefono": telefono,
+        "email": email,
         "direccion": direccion
     }
 
     if not nombre or not nombre.strip():
         errors.append("El nombre es obligatorio.")
-    if not apellido or not apellido.strip():
+    if not telefono or not telefono.strip():
         errors.append("El apellido es obligatorio.")
 
     if errors:
@@ -58,8 +58,8 @@ def create_duenyo(
     try:
         dueno = Duenyo(
             nombre=nombre.strip(),
-            apellido=apellido.strip(),
-            telefono=telefono.strip() if telefono else None,
+            telefono=telefono.strip(),
+            email=email.strip() if email else None,
             direccion=direccion.strip() if direccion else None
         )
 
@@ -100,14 +100,14 @@ def dueno_detail(request: Request, duenyo_id: int, db: Session = Depends(get_db)
 
 @router.get("/{duenyo_id}/edit", response_class=HTMLResponse)
 def show_edit_form(request: Request, duenyo_id: int, db: Session = Depends(get_db)):
-    dueno = db.execute(select(Duenyo).where(Duenyo.id == duenyo_id)).scalar_one_or_none()
+    duenyo = db.execute(select(Duenyo).where(Duenyo.id == duenyo_id)).scalar_one_or_none()
 
-    if dueno is None:
+    if duenyo is None:
         raise HTTPException(status_code=404, detail="Dueño no encontrado")
 
     return templates.TemplateResponse(
         "duenyos/form.html",
-        {"request": request, "dueno": dueno}
+        {"request": request, "duenyo": duenyo}
     )
 
 @router.post("/{duenyo_id}/edit", response_class=HTMLResponse)
@@ -115,46 +115,46 @@ def update_duenyo(
     request: Request,
     duenyo_id: int,
     nombre: str = Form(...),
-    apellido: str = Form(...),
-    telefono: str = Form(None),
+    telefono: str = Form(...),
+    email: str = Form(None),
     direccion: str = Form(None),
     db: Session = Depends(get_db)
 ):
-    dueno = db.execute(select(Duenyo).where(Duenyo.id == duenyo_id)).scalar_one_or_none()
+    duenyo = db.execute(select(Duenyo).where(Duenyo.id == duenyo_id)).scalar_one_or_none()
 
-    if dueno is None:
+    if duenyo is None:
         raise HTTPException(status_code=404, detail="Dueño no encontrado")
 
     errors = []
 
     if not nombre.strip():
         errors.append("El nombre es obligatorio")
-    if not apellido.strip():
-        errors.append("El apellido es obligatorio")
+    if not telefono.strip():
+        errors.append("El telefono es obligatorio")
 
     if errors:
         return templates.TemplateResponse(
             "duenyos/form.html",
-            {"request": request, "duenyo": dueno, "errors": errors}
+            {"request": request, "duenyo": duenyo, "errors": errors}
         )
 
     try:
-        dueno.nombre = nombre.strip()
-        dueno.apellido = apellido.strip()
-        dueno.telefono = telefono.strip() if telefono else None
-        dueno.direccion = direccion.strip() if direccion else None
+        duenyo.nombre = nombre.strip()
+        duenyo.telefono = telefono.strip()
+        duenyo.email = email.strip() if email else None
+        duenyo.direccion = direccion.strip() if direccion else None
 
         db.commit()
-        db.refresh(dueno)
+        db.refresh(duenyo)
 
-        return RedirectResponse(url=f"/duenyos/{dueno.id}", status_code=303)
+        return RedirectResponse(url=f"/duenyos/{duenyo.id}", status_code=303)
 
     except Exception as e:
         db.rollback()
         errors.append(f"Error al actualizar: {str(e)}")
         return templates.TemplateResponse(
             "duenyos/form.html",
-            {"request": request, "duenyo": dueno, "errors": errors}
+            {"request": request, "duenyo": duenyo, "errors": errors}
         )
 
 @router.post("/{duenyo_id}/delete")
