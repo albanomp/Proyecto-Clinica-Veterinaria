@@ -34,7 +34,8 @@
                     <td>{{ cita.id }}</td>
                     <td>{{ cita.fecha_hora}}</td>
                     <td>{{ cita.motivo}}</td>
-                    <td>{{ cita.veterinario_id}}</td>
+                    <td>{{ cita.veterinario.nombre if cita.veterinario else "No asignado" }}</td>
+
                     <td>{{ cita.mascota_id}}</td>
                     <td class="d-flex align-items-center">
                         <a href="/citas/{{cita.id}}" class="btn btn-info me-4">

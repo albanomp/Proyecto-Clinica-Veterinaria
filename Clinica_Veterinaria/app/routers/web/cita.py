@@ -1,12 +1,13 @@
 from datetime import datetime
-from fastapi import APIRouter, Form,HTTPException, Request, Depends
+from fastapi import APIRouter, Form, HTTPException, Request, Depends
+#from Clinica_Veterinaria.app.routers.web import veterinarios
 from app.templates import templates
 from fastapi.responses import HTMLResponse, RedirectResponse
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, selectinload
 from sqlalchemy import select
 
 from app.database import get_db
-from app.models import Cita
+from app.models import Cita, Veterinario
 
 #router para rutas web
 router = APIRouter(prefix="/citas", tags= ["web"])
@@ -14,7 +15,7 @@ router = APIRouter(prefix="/citas", tags= ["web"])
 # Listar citas (http://localhost:8000/citas)
 @router.get("", response_class=HTMLResponse)
 def lista_de_citas(request: Request, db: Session = Depends(get_db)):
-    citas = db.execute(select(Cita)).scalars().all()
+    citas = db.execute(select(Cita).options(selectinload(Cita.veterinario))).scalars().all()
 
     return templates.TemplateResponse(
         "citas/list.html",
@@ -23,10 +24,12 @@ def lista_de_citas(request: Request, db: Session = Depends(get_db)):
 
 # mostrar formulario crear
 @router.get("/new", response_class=HTMLResponse)
-def mostrar_formul_creado(request: Request):
+def mostrar_formul_creado(request: Request, db: Session = Depends(get_db)):
+    veterinarios = db.execute(select(Veterinario)).scalars().all()
+
     return templates.TemplateResponse(
         "citas/form.html",
-        {"request" : request, "citas" : None}
+        {"request" : request, "citas" : None, "veterinarios": veterinarios}
     )
 
 # crear nueva cita
@@ -100,17 +103,17 @@ def crear_cita(
 
         #raise HTTPException(status_code=400, detail="El vetrinario_id tiene que ser un numero entero positivo > 0")
         
-        """
-        # NOTA comentar a Maria if errors
-        Comprobar longitud if len(errors):
-        
-        """ 
+    veterinario = db.execute(select(Veterinario).where(Veterinario.id == veterinario_id_value)).scalar_one_or_none()
+    if not veterinario:
+        errors.append("El veterinario seleccionado no existe")
+
+
 
     if errors:
         return templates.TemplateResponse(
             "citas/form.html",
-            {"request": request, "cita": None, "errors": errors, "form_data": form_data}
-        )
+            {"request": request, "cita": None, "errors": errors, "veterinarios": veterinarios, "form_data": form_data}
+            )
     
     try:
         cita = Cita(
@@ -127,9 +130,10 @@ def crear_cita(
     except Exception as e:
         db.rollback()
         errors.append(f"Error al crear la cita: {str(e)}")
+        veterinarios = db.execute(select(Veterinario)).scalars().all()
         return templates.TemplateResponse(
             "citas/form.html",
-            {"request": request, "cita": None, "errors": errors, "form_data": form_data}
+            {"request": request, "cita": None, "errors": errors, "form_data": form_data, "veterinarios": veterinarios}
         )
     
 # detalle de cita (http://localhost:8000/citas/3)
@@ -140,7 +144,9 @@ def cita_detail(request: Request,cita_id: int, db: Session = Depends(get_db)):
     if cita is None:
         raise HTTPException(status_code=404, detail="Error 404 Cita no encontrada")
     
-    return templates.TemplateResponse("citas/detail.html",{ "request": request, "cita": cita}
+    veterinarios = db.execute(select(Veterinario)).scalars().all()
+
+    return templates.TemplateResponse("citas/detail.html",{ "request": request, "cita": cita, "veterinarios": veterinarios}
     )
 
 # mostrar formulario editar
@@ -153,9 +159,11 @@ def mostrar_editor_formulario(request: Request, cita_id: int, db: Session = Depe
     if cita is None:
         raise HTTPException(status_code=404, detail="404 - la cita no ha sido encontrada")
     
+    veterinarios = db.execute(select(Veterinario)).scalars().all()
+
     return templates.TemplateResponse(
         "citas/form.html",
-        {"request": request , "cita": cita}
+        {"request": request , "cita": cita, "veterinarios": veterinarios}
     )
 
 # editar cita existente
@@ -238,13 +246,17 @@ def actualizar_cita(
         """
         # NOTA comentar a Maria if errors
         Comprobar longitud if len(errors):
-        
-        """ 
+        """
+    veterinario = db.execute(select(Veterinario).where(Veterinario.id == veterinario_id_value)).scalar_one_or_none()
+    if not veterinario:
+        errors.append("El veterinario seleccionado no existe")
 
     if errors:
+        veterinarios = db.execute(select(Veterinario)).scalars().all()
+
         return templates.TemplateResponse(
             "citas/form.html",
-            {"request": request, "cita": None, "errors": errors, "form_data": form_data}
+            {"request": request, "cita": None, "errors": errors, "form_data": form_data, "veterinarios": veterinarios}
         )
     
     try:
@@ -262,17 +274,18 @@ def actualizar_cita(
         # deshacer los cambios y añadir el error a la lista de errores
         db.rollback()
         errors.append(f"Error al actualizar la cita: {str(e)}")
+        veterinarios = db.execute(select(Veterinario)).scalars().all()
         # devolver al formulario de edición
         return templates.TemplateResponse(
-            "citas/form.html", {"request": request, "cita": cita, "errors": errors, "form_data": form_data}
+            "citas/form.html", {"request": request, "cita": cita, "errors": errors, "form_data": form_data, "veterinarios":veterinarios}
         )
     
 # eliminar cita
 @router.post("/{cita_id}/delete", response_class=HTMLResponse)
 def borrar_cita(request: Request, cita_id: int, db: Session = Depends(get_db)):
     # obtenemos la cita en base de datos
-    cita = db.execute(select(Cita).where(Cita.id == cita_id)).scalar_one_or_none()
-
+    cita = db.execute(select(Cita).options(selectinload(Cita.veterinario)).where(Cita.id == cita_id)).scalar_one_or_none()
+    
     # si no hay cita lanzar una excepción
     if cita is None:
         raise HTTPException(status_code=404, detail="404 - La cita no ha sido encontrada")

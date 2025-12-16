@@ -1,9 +1,13 @@
 
+from __future__ import annotations
+from typing import TYPE_CHECKING
 from datetime import datetime
-from sqlalchemy import Integer, String, DateTime
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy import ForeignKey, Integer, String, DateTime
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.database import Base
 
+if TYPE_CHECKING:
+    from .veterinario import Veterinario
 
 class Cita(Base):
     __tablename__ = "citas" # nombre de la tabla en bd
@@ -15,8 +19,9 @@ class Cita(Base):
     # requerido, máximo 200 caracteres
     motivo: Mapped[str] = mapped_column(String(300), nullable=False)
     # requerido
-    #  veterinario_id: Mapped[int] = mapped_column(ForeignKey("veterinarios.id"), nullable=False)
-    veterinario_id: Mapped[int] = mapped_column(Integer, nullable=False)
+    veterinario_id: Mapped[int] = mapped_column(ForeignKey("veterinarios.id"), nullable=False)
+    veterinario: Mapped["Veterinario"] = relationship(back_populates="citas")
+    #veterinario_id: Mapped[int] = mapped_column(Integer, nullable=False)
     # requerido
-    # mascota_id: Mapped[int] = mapped_column(ForeignKey("mascotas.id"), nullable=False)
-    mascota_id: Mapped[int] = mapped_column(Integer, nullable=False)
+    mascota_id: Mapped[int] = mapped_column(ForeignKey("mascotas.id"), nullable=False)
+    mascota: Mapped["Mascota"] = relationship(back_populates="citas")
