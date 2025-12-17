@@ -16,5 +16,4 @@ class Veterinario(Base):
     colegiado: Mapped[int] = mapped_column(Integer, nullable=False)
     especialidad: Mapped[str] = mapped_column(String(200), nullable=False)
     telefono: Mapped[int] = mapped_column(Integer, nullable=False)
-    citas: Mapped[List["Cita"]] = relationship(
-        back_populates="veterinario")
+    citas: Mapped[List["Cita"]] = relationship(back_populates="veterinario", cascade="all, delete-orphan")
