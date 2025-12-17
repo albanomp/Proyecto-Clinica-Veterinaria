@@ -89,7 +89,8 @@ def init_db():
                     tipo="vacuna",
                     descripcion="Vacuna anual para protección de la rabia.",
                     duracion="1 año",
-                    ingreso=False
+                    ingreso=False,
+                    mascota_id = 1
                 ),
                 Tratamiento(
                     nombre="Limpieza dental",
@@ -97,7 +98,8 @@ def init_db():
                     tipo="estetico",
                     descripcion="Limpieza dental completa bajo sedación.",
                     duracion="2 horas",
-                    ingreso=True
+                    ingreso=True,
+                    mascota_id = 2
                 ),
                 Tratamiento(
                     nombre="Antibiótico en comprimidos",
@@ -105,7 +107,8 @@ def init_db():
                     tipo="medicamento",
                     descripcion="Antibiótico de amplio espectro por herida infectada.",
                     duracion="7 días",
-                    ingreso=False
+                    ingreso=False,
+                    mascota_id = 5
                 )
             ]
             db.add_all(default_tr)
@@ -127,7 +130,7 @@ def init_db():
                 Cita( fecha_hora=datetime(2025, 12, 19, 9, 30),motivo="Vacunación",
                 veterinario_id=1, mascota_id=6),
                 Cita( fecha_hora=datetime(2025, 12, 19, 12, 30),motivo="Vacunación",
-                veterinario_id=1, mascota_id=8)
+                veterinario_id=1, mascota_id=7)
 
             ]
             db.add_all(default_citas)

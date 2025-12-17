@@ -7,6 +7,7 @@ from sqlalchemy import ForeignKey, Integer, String, Boolean
 if TYPE_CHECKING:
     from .duenyo import Duenyo
     from .cita import Cita
+    from .tratamiento import Tratamiento
 
 class Mascota(Base):
     __tablename__ = "mascotas"
@@ -20,3 +21,4 @@ class Mascota(Base):
     duenyo_id: Mapped[int] = mapped_column(ForeignKey("duenyos.id"), nullable=False)
     duenyo: Mapped["Duenyo"] = relationship(back_populates="mascotas")
     citas: Mapped[List["Cita"]] = relationship(back_populates="mascota", cascade="all, delete-orphan")
+    tratamientos: Mapped[List["Tratamiento"]] = relationship(back_populates="mascota", cascade="all, delete-orphan")

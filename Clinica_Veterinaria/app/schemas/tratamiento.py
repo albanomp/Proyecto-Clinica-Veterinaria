@@ -18,6 +18,7 @@ class TratamientoCreate(BaseModel):
     descripcion: str = ""
     duracion: str = "1 día"
     ingreso: bool = False
+    mascota_id: int
 
 
 class TratamientoUpdate(BaseModel):
@@ -29,6 +30,7 @@ class TratamientoUpdate(BaseModel):
     descripcion: str
     duracion: str
     ingreso: bool
+    mascota_id: int
 
 
 class TratamientoPatch(BaseModel):
@@ -40,6 +42,7 @@ class TratamientoPatch(BaseModel):
     descripcion: str | None = None
     duracion: str | None = None
     ingreso: bool | None = None
+    mascota_id: int | None = None
 
 
 class TratamientoResponse(BaseModel):
@@ -52,3 +55,4 @@ class TratamientoResponse(BaseModel):
     descripcion: str
     duracion: str
     ingreso: bool
+    mascota_id: int
