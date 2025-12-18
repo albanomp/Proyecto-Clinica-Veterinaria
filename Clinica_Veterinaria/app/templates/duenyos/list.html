@@ -26,6 +26,7 @@
                     <th>ID</th>
                     <th>Nombre</th>
                     <th>Teléfono</th>
+                    <th>Direccion</th>
                     <th>Email</th>
                     <th>Acciones</th>
                 </tr>
@@ -37,6 +38,7 @@
                     <td>{{ duenyo.id }}</td>
                     <td>{{ duenyo.nombre }}</td>
                     <td>{{ duenyo.telefono }}</td>
+                    <td>{{ duenyo.direccion if duenyo.direccion else '-' }}</td>
                     <td>{{ duenyo.email if duenyo.email else '-' }}</td>
                     <td>
                         <a href="/duenyos/{{ duenyo.id }}" class="btn btn-info">
@@ -44,6 +46,13 @@
                         </a>
                         <a href="/duenyos/{{ duenyo.id }}/edit" class="btn btn-warning">
                             <i class="fa-solid fa-pen-to-square"></i> Editar
+                        </a>
+                        <form action="/duenyos/{{duenyo.id}}/delete" method="post" style="display:inline-block;">
+                            <button type="submit" class="btn btn-sm btn-danger"
+                                onclick="return confirm('¿Seguro que quieres eliminar este dueño?');">
+                                <i class="fa-solid fa-trash"></i> Eliminar
+                            </button>
+                        </form>
                     </td>
                 </tr>
                 {% endfor %}
