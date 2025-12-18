@@ -3,13 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <title>{% if tratamiento %}Editar{% else %}Crear{% endif %} tratamiento</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 
 <body>
 <div class="container mt-5">
     <div class="card shadow">
+
         <div class="card-header bg-danger text-white">
             <h3 class="mb-0">
                 {% if tratamiento %}Editar{% else %}Nuevo{% endif %} tratamiento
@@ -17,46 +20,89 @@
         </div>
 
         <div class="card-body">
-            <form method="post"
-                  action="{% if tratamiento %}/tratamientos/{{ tratamiento.id }}/edit{% else %}/tratamientos/new{% endif %}">
 
+            {% if errors %}
+            <div class="alert alert-danger">
+                <ul class="mb-0">
+                    {% for error in errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+
+            <form method="post"
+                  action="{% if tratamiento %}/tratamientos/{{ tratamiento.id }}/edit{% else %}/tratamientos/nuevo{% endif %}">
+
+                <!-- Nombre -->
                 <div class="mb-3">
                     <label class="form-label">Nombre</label>
                     <input type="text" name="nombre" class="form-control"
-                           value="{{ tratamiento.nombre if tratamiento else '' }}" required>
+                           value="{{ form_data.nombre if form_data else (tratamiento.nombre if tratamiento else '') }}"
+                           required>
                 </div>
 
+                <!-- Costo -->
                 <div class="mb-3">
                     <label class="form-label">Costo (€)</label>
                     <input type="number" step="0.01" name="costo" class="form-control"
-                           value="{{ tratamiento.costo if tratamiento else '' }}" required>
+                           value="{{ form_data.costo if form_data else (tratamiento.costo if tratamiento else '') }}"
+                           required>
                 </div>
 
+                <!-- Tipo -->
                 <div class="mb-3">
                     <label class="form-label">Tipo</label>
                     <input type="text" name="tipo" class="form-control"
-                           value="{{ tratamiento.tipo if tratamiento else '' }}" required>
+                           value="{{ form_data.tipo if form_data else (tratamiento.tipo if tratamiento else '') }}"
+                           required>
                 </div>
 
+                <!-- Descripción -->
                 <div class="mb-3">
                     <label class="form-label">Descripción</label>
-                    <textarea name="descripcion" class="form-control">{{ tratamiento.descripcion if tratamiento else '' }}</textarea>
+                    <textarea name="descripcion" class="form-control" rows="3">{{ form_data.descripcion if form_data else (tratamiento.descripcion if tratamiento else '') }}</textarea>
                 </div>
 
+                <!-- Duración -->
                 <div class="mb-3">
                     <label class="form-label">Duración (minutos)</label>
                     <input type="number" name="duracion" class="form-control"
-                           value="{{ tratamiento.duracion if tratamiento else '' }}">
+                           value="{{ form_data.duracion if form_data else (tratamiento.duracion if tratamiento else '') }}"
+                           required>
                 </div>
 
+                <!-- Ingreso -->
                 <div class="form-check mb-3">
-                    <input class="form-check-input" type="checkbox" name="ingreso"
-                           {% if tratamiento and tratamiento.ingreso %}checked{% endif %}>
-                    <label class="form-check-label">Requiere ingreso</label>
+                    <input class="form-check-input" type="checkbox"
+                           name="ingreso" value="true"
+                           {% if (form_data and form_data.ingreso == 'true') or (tratamiento and tratamiento.ingreso) %}checked{% endif %}>
+                    <label class="form-check-label">
+                        Requiere ingreso
+                    </label>
                 </div>
 
+                <!-- Mascota -->
+                <div class="mb-4">
+                    <label class="form-label">Mascota</label>
+                    <select name="mascota_id" class="form-select" required>
+                        <option value="">-- Selecciona una mascota --</option>
+                        {% for mascota in mascotas %}
+                        <option value="{{ mascota.id }}"
+                            {% if (form_data and form_data.mascota_id == mascota.id) or (tratamiento and tratamiento.mascota_id == mascota.id) %}
+                                selected
+                            {% endif %}>
+                            {{ mascota.nombre }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Botones -->
                 <div class="d-flex justify-content-between">
-                    <a href="/tratamientos" class="btn btn-secondary">Cancelar</a>
+                    <a href="/tratamientos" class="btn btn-secondary">
+                        Cancelar
+                    </a>
                     <button type="submit" class="btn btn-danger">
                         {% if tratamiento %}Actualizar{% else %}Crear{% endif %}
                     </button>
@@ -66,5 +112,8 @@
         </div>
     </div>
 </div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

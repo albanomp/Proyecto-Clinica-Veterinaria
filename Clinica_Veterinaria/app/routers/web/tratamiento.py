@@ -168,7 +168,7 @@ def update_tratamiento(
         mascotas = db.execute(select(Mascota)).scalars().all()
         return templates.TemplateResponse(
             "tratamientos/form.html",
-            {"request": request, "tratamiento": None, "errors": errors, "form_data": form_data, "mascotas": mascotas}
+            {"request": request, "tratamiento": tratamiento, "errors": errors, "form_data": form_data, "mascotas": mascotas}
         )
 
     try:
