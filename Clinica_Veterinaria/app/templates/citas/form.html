@@ -60,20 +60,44 @@
                                 <div class="form-text">El motivo de la cita (máximo 200 caracteres)</div>
                             </div>
 
-                            <div class="mb-3">
+                            <!-- <div class="mb-3">
                                 <label for="veterinario_id" class="form-label">Veterinario<span class="text-danger">*</span></label>
                                 <input
                                     type="number"
                                     class="form-control"
                                     id="veterinario_id"
                                     name="veterinario_id"
-                                    value="{% if form_data and form_data.get('veterinario_id') %}{{ form_data.get('veterinario_id') }}{% elif cita and cita.veterinario_id is not none %}{{ cita.veterinario_id }}{% endif %}"
+                                    value="{% if form_data and form_data.get('veterinario_id') %}{{ form_data.get('veterinario_id') }}{% elif cita and cita.veterinario.nombre is not none %}{{ cita.veterinario.nombre }}{% endif %}"
                                     min="0"
                                     step="1"
                                     required
                                 >
                                 <div class="form-text">Veterinario asignado para la cita (numero entero positivo)</div>
+                            </div> -->
+
+                            <div class="mb-3">
+                                <label for="veterinario_id" class="form-label">Veterinario <span class="text-danger">*</span></label>
+                                <select 
+                                    class="form-select" 
+                                    id="veterinario_id" 
+                                    name="veterinario" 
+                                    required
+                                >
+                                    <option value="">Seleccione un veterinario</option>
+                                    {% for veterinario in veterinarios %}
+                                    <option 
+                                        value="{{ veterinario.id }}"
+                                        {% if form_data and form_data.get('veterinario_id')|string == veterinario.id|string %}selected 
+                                        {% elif cita and cita.veterinario_id == veterinario.id %}selected{% endif %}
+                                    >
+                                        {{ veterinario.nombre }} 
+                                        <!-- (id:{{veterinario.id}}) -->
+                                    </option>
+                                    {% endfor %}
+                                </select>
+                                <div class="form-text">Seleccione el veterinario para la cita</div>
                             </div>
+
 
                             <div class="mb-3">
                                 <label for="mascota_id" class="form-label">Mascota<span class="text-danger">*</span></label>

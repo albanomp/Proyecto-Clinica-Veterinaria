@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session, selectinload
 from sqlalchemy import select
 
 from app.database import get_db
-from app.models import Cita, Veterinario
+from app.models import Cita, Veterinario, Mascota
 
 #router para rutas web
 router = APIRouter(prefix="/citas", tags= ["web"])
@@ -26,10 +26,11 @@ def lista_de_citas(request: Request, db: Session = Depends(get_db)):
 @router.get("/new", response_class=HTMLResponse)
 def mostrar_formul_creado(request: Request, db: Session = Depends(get_db)):
     veterinarios = db.execute(select(Veterinario)).scalars().all()
+    mascotas = db.execute(select(Mascota)).scalars().all()
 
     return templates.TemplateResponse(
         "citas/form.html",
-        {"request" : request, "citas" : None, "veterinarios": veterinarios}
+        {"request" : request, "citas" : None, "veterinarios": veterinarios, "mascotas": mascotas}
     )
 
 # crear nueva cita
@@ -102,17 +103,23 @@ def crear_cita(
         errors.append("El vetrinario_id tiene que ser un numero entero positivo > 0")
 
         #raise HTTPException(status_code=400, detail="El vetrinario_id tiene que ser un numero entero positivo > 0")
-        
+    """
     veterinario = db.execute(select(Veterinario).where(Veterinario.id == veterinario_id_value)).scalar_one_or_none()
     if not veterinario:
         errors.append("El veterinario seleccionado no existe")
 
+    mascota = db.execute(select(Mascota).where(Mascota.id == mascota_id_value)).scalar_one_or_none()
+    if not mascota:
+        errors.append("La mascota seleccionada no existe")
+    """
 
+    veterinarios = db.execute(select(Veterinario)).scalars().all()
+    mascotas = db.execute(select(Mascota)).scalars().all()
 
     if errors:
         return templates.TemplateResponse(
             "citas/form.html",
-            {"request": request, "cita": None, "errors": errors, "veterinarios": veterinarios, "form_data": form_data}
+            {"request": request, "cita": None, "errors": errors, "veterinarios": veterinarios, "mascotas": mascotas, "form_data": form_data}
             )
     
     try:
@@ -130,10 +137,10 @@ def crear_cita(
     except Exception as e:
         db.rollback()
         errors.append(f"Error al crear la cita: {str(e)}")
-        veterinarios = db.execute(select(Veterinario)).scalars().all()
+    
         return templates.TemplateResponse(
             "citas/form.html",
-            {"request": request, "cita": None, "errors": errors, "form_data": form_data, "veterinarios": veterinarios}
+            {"request": request, "cita": None, "errors": errors, "form_data": form_data, "veterinarios": veterinarios, "mascotas": mascotas}
         )
     
 # detalle de cita (http://localhost:8000/citas/3)
@@ -145,8 +152,10 @@ def cita_detail(request: Request,cita_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Error 404 Cita no encontrada")
     
     veterinarios = db.execute(select(Veterinario)).scalars().all()
+    mascotas = db.execute(select(Mascota)).scalars().all()
 
-    return templates.TemplateResponse("citas/detail.html",{ "request": request, "cita": cita, "veterinarios": veterinarios}
+
+    return templates.TemplateResponse("citas/detail.html",{ "request": request, "cita": cita, "veterinarios": veterinarios, "mascotas": mascotas}
     )
 
 # mostrar formulario editar
@@ -160,10 +169,12 @@ def mostrar_editor_formulario(request: Request, cita_id: int, db: Session = Depe
         raise HTTPException(status_code=404, detail="404 - la cita no ha sido encontrada")
     
     veterinarios = db.execute(select(Veterinario)).scalars().all()
+    mascotas = db.execute(select(Mascota)).scalars().all()
+
 
     return templates.TemplateResponse(
         "citas/form.html",
-        {"request": request , "cita": cita, "veterinarios": veterinarios}
+        {"request": request , "cita": cita, "veterinarios": veterinarios, "mascotas": mascotas}
     )
 
 # editar cita existente
@@ -243,20 +254,23 @@ def actualizar_cita(
 
         #raise HTTPException(status_code=400, detail="El vetrinario_id tiene que ser un numero entero positivo > 0")
         
-        """
+    """
         # NOTA comentar a Maria if errors
         Comprobar longitud if len(errors):
-        """
+    
     veterinario = db.execute(select(Veterinario).where(Veterinario.id == veterinario_id_value)).scalar_one_or_none()
     if not veterinario:
         errors.append("El veterinario seleccionado no existe")
+    """
 
     if errors:
         veterinarios = db.execute(select(Veterinario)).scalars().all()
+        mascotas = db.execute(select(Mascota)).scalars().all()
+
 
         return templates.TemplateResponse(
             "citas/form.html",
-            {"request": request, "cita": None, "errors": errors, "form_data": form_data, "veterinarios": veterinarios}
+            {"request": request, "cita": None, "errors": errors, "form_data": form_data, "veterinarios": veterinarios, "mascotas": mascotas}
         )
     
     try:
@@ -275,9 +289,12 @@ def actualizar_cita(
         db.rollback()
         errors.append(f"Error al actualizar la cita: {str(e)}")
         veterinarios = db.execute(select(Veterinario)).scalars().all()
+        mascotas = db.execute(select(Mascota)).scalars().all()
+
+
         # devolver al formulario de edición
         return templates.TemplateResponse(
-            "citas/form.html", {"request": request, "cita": cita, "errors": errors, "form_data": form_data, "veterinarios":veterinarios}
+            "citas/form.html", {"request": request, "cita": cita, "errors": errors, "form_data": form_data, "veterinarios":veterinarios, "mascotas": mascotas}
         )
     
 # eliminar cita
