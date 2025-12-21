@@ -179,7 +179,7 @@ def mostrar_editor_formulario(request: Request, cita_id: int, db: Session = Depe
 
 # editar cita existente
 @router.post("/{cita_id}/edit", response_class=HTMLResponse)
-def actualizar_cita(
+async def actualizar_cita(
     request: Request,
     cita_id: int,
     fecha_hora: str = Form(...),
@@ -188,6 +188,9 @@ def actualizar_cita(
     mascota_id: str = Form(...),
     db: Session = Depends(get_db)
 ):
+    # debug: capture raw form data to inspect what the browser actually sends
+    form = await request.form()
+    print("DEBUG - FORM DATA:", dict(form))
     cita = db.execute(select(Cita).where(Cita.id == cita_id)).scalar_one_or_none()
 
     if cita is None:
@@ -270,7 +273,7 @@ def actualizar_cita(
 
         return templates.TemplateResponse(
             "citas/form.html",
-            {"request": request, "cita": None, "errors": errors, "form_data": form_data, "veterinarios": veterinarios, "mascotas": mascotas}
+            {"request": request, "cita": None, "errors": errors, "form_data": form_data, "veterinarios": veterinarios, "mascotas": mascotas, "raw_form": dict(form)}
         )
     
     try:
@@ -294,7 +297,7 @@ def actualizar_cita(
 
         # devolver al formulario de edición
         return templates.TemplateResponse(
-            "citas/form.html", {"request": request, "cita": cita, "errors": errors, "form_data": form_data, "veterinarios":veterinarios, "mascotas": mascotas}
+            "citas/form.html", {"request": request, "cita": cita, "errors": errors, "form_data": form_data, "veterinarios":veterinarios, "mascotas": mascotas, "raw_form": dict(form)}
         )
     
 # eliminar cita

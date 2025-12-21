@@ -31,6 +31,13 @@
                         </div>
                         {% endif %}
 
+                        {% if raw_form %}
+                        <div class="alert alert-info" role="alert">
+                            <h6>Datos enviados (debug):</h6>
+                            <pre>{{ raw_form }}</pre>
+                        </div>
+                        {% endif %}
+
                         <form method="post" action="{% if cita %}/citas/{{ cita.id }}/edit{% else %}/citas/new{% endif %}">
                             <div class="mb-3">
                                 <label for="fecha_hora" class="form-label">Fecha y hora <span class="text-danger">*</span></label>
@@ -39,7 +46,7 @@
                                     class="form-control"
                                     id="fecha_hora"
                                     name="fecha_hora"
-                                    value="{% if form_data %}{{ form_data.get('fecha_hora', '') }}{% elif cita %}{{ cita.fecha_hora }}{% endif %}"
+                                    value="{% if form_data %}{{ form_data.get('fecha_hora', '') }}{% elif cita and cita.fecha_hora %}{{ cita.fecha_hora.strftime('%Y-%m-%dT%H:%M') }}{% endif %}"
                                     required
                                     maxlength="200"
                                 >
@@ -80,7 +87,7 @@
                                 <select 
                                     class="form-select" 
                                     id="veterinario_id" 
-                                    name="veterinario" 
+                                    name="veterinario_id" 
                                     required
                                 >
                                     <option value="">Seleccione un veterinario</option>
@@ -90,15 +97,14 @@
                                         {% if form_data and form_data.get('veterinario_id')|string == veterinario.id|string %}selected 
                                         {% elif cita and cita.veterinario_id == veterinario.id %}selected{% endif %}
                                     >
-                                        {{ veterinario.nombre }} 
-                                        <!-- (id:{{veterinario.id}}) -->
+                                        {{ veterinario.nombre }} (id:{{veterinario.id}})
                                     </option>
                                     {% endfor %}
                                 </select>
                                 <div class="form-text">Seleccione el veterinario para la cita</div>
                             </div>
 
-
+<!-- 
                             <div class="mb-3">
                                 <label for="mascota_id" class="form-label">Mascota<span class="text-danger">*</span></label>
                                 <input
@@ -112,6 +118,29 @@
                                     required
                                 >
                                 <div class="form-text">Mascota para la cita (numero entero positivo)</div>
+                            </div> 
+-->
+
+                            <div class="mb-3">
+                                <label for="mascota" class="form-label">Mascota <span class="text-danger">*</span></label>
+                                <select 
+                                    class="form-select" 
+                                    id="mascota_id" 
+                                    name="mascota_id" 
+                                    required
+                                >
+                                    <option value="">Seleccione una mascota</option>
+                                    {% for mascota in mascotas %}
+                                    <option 
+                                        value="{{ mascota.id }}"
+                                        {% if form_data and form_data.get('mascota_id')|string == mascota.id|string %}selected 
+                                        {% elif cita and cita.mascota_id == mascota.id %}selected{% endif %}
+                                    >
+                                        {{ mascota.nombre }} (id:{{mascota.id}}) 
+                                    </option>
+                                    {% endfor %}
+                                </select>
+                                <div class="form-text">Seleccione la mascota para la cita</div>
                             </div>
 
                             

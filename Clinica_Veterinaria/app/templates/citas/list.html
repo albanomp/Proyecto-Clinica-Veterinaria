@@ -36,7 +36,7 @@
                     <td>{{ cita.motivo}}</td>
                     <td>{{ cita.veterinario.nombre if cita.veterinario else "No asignado" }}</td>
 
-                    <td>{{ cita.mascota.nombre if cita.mascota_id else "No asignado"}}</td>
+                    <td>{{ cita.mascota.nombre if cita.mascota_id else "No asignada"}}</td>
                     <td class="d-flex align-items-center">
                         <a href="/citas/{{cita.id}}" class="btn btn-info me-4">
                             <i class="fa-solid fa-eye"></i> Ver
