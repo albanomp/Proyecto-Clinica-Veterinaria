@@ -125,7 +125,7 @@ def init_db():
                 veterinario_id=2, mascota_id=4),
                 Cita( fecha_hora=datetime(2025, 12, 16, 10, 30),motivo="Visita Inicial",
                 veterinario_id=2, mascota_id=2),
-                Cita( fecha_hora=datetime(2025, 12, 17, 10, 30),motivo="Tratamoento",
+                Cita( fecha_hora=datetime(2025, 12, 17, 10, 30),motivo="Tratamiento",
                 veterinario_id=2, mascota_id=5),
                 Cita( fecha_hora=datetime(2025, 12, 19, 9, 30),motivo="Vacunación",
                 veterinario_id=1, mascota_id=6),
