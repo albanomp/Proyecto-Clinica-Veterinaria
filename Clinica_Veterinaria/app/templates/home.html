@@ -17,15 +17,16 @@
            FONDO GENERAL
         ========================== */
         body {
+            margin: 0;
             min-height: 100vh;
             background-image: url("/static/Banner2.png");
             background-size: cover;
-            background-position: center;
+            background-position: right bottom;
             background-repeat: no-repeat;
             background-attachment: fixed;
         }
 
-        /* Overlay suave para unificar el fondo */
+        /* Overlay suave */
         body::before {
             content: "";
             position: fixed;
@@ -35,14 +36,27 @@
         }
 
         /* =========================
-           CONTENEDOR PRINCIPAL
+           PANEL PRINCIPAL
         ========================== */
-        .container {
-            background-color: rgba(255, 255, 255, 0.85);
-            padding: 25px 30px;
-            border-radius: 22px;
-            backdrop-filter: blur(6px);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        .main-panel {
+            width: 70%;
+            max-width: 1100px;
+            min-width: 320px;
+
+            background-color: rgba(255, 255, 255, 0);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0);
+            padding: 30px 35px;
+            border-radius: 24px;
+
+            backdrop-filter: blur(8px);
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0);
+
+            position: absolute;
+            top: 72%;
+            left: 42%;
+            transform: translateY(-50%);
         }
 
         /* =========================
@@ -77,31 +91,46 @@
             background-color: transparent;
         }
 
-        a.citas-link.btn:hover,
-        a.citas-link.btn:focus {
+        a.citas-link.btn:hover {
             color: #ffffff;
             background-color: #6f42c1;
             border-color: #6f42c1;
-            text-decoration: none;
         }
 
         /* =========================
-           ESPACIADOS
+           ESPACIADO
         ========================== */
         .row {
             margin-bottom: 1.5rem;
+        }
+
+        /* =========================
+           RESPONSIVE
+        ========================== */
+        @media (max-width: 768px) {
+            .main-panel {
+                position: relative;
+                width: 95%;
+                left: 50%;
+                top: 30px;
+                transform: translateX(-50%);
+                margin-bottom: 40px;
+            }
+
+            body {
+                background-position: center bottom;
+            }
         }
     </style>
 </head>
 
 <body>
 
-<div class="container mt-5">
+<div class="main-panel">
 
     <!-- ENCABEZADO -->
     <div class="row justify-content-center">
         <div class="col-md-9 text-center">
-
             <h1 class="display-4">
                 Clínica Veterinaria Joralmar
                 <i class="fa-solid fa-paw fa-bounce" style="color:#0d6efd;"></i>
@@ -110,13 +139,11 @@
             <p class="lead text-secondary">
                 Cuidamos de tus mejores amigos con amor 💙
             </p>
-
         </div>
     </div>
 
     <!-- PRIMERA FILA -->
     <div class="row text-center">
-
         <div class="col-md-4">
             <h2 class="text-primary">
                 Mascotas <i class="fa-solid fa-dog"></i>
@@ -158,12 +185,10 @@
                 Ver Dueño Registrado
             </a>
         </div>
-
     </div>
 
     <!-- SEGUNDA FILA -->
     <div class="row text-center">
-
         <div class="col-md-6">
             <h2 class="text-danger">
                 Tratamientos <i class="fa-solid fa-syringe"></i>
@@ -192,7 +217,6 @@
                 Ver Cita Registrada
             </a>
         </div>
-
     </div>
 
 </div>
