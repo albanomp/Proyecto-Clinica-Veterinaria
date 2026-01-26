@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Detalle del producto</title>
+ 
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+ 
+<body>
+<div class="container mt-5">
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white">
+            <h3>{{ inventario.nombre }}</h3>
+        </div>
+ 
+        <div class="card-body">
+            <p><strong>Tipo:</strong> {{ inventario.tipo }}</p>
+ 
+            <p><strong>Cantidad disponible:</strong> {{ inventario.cantidad }}</p>
+ 
+            <p><strong>Precio:</strong>
+                {% if inventario.precio %}
+                    {{ inventario.precio }} €
+                {% else %}
+                    No especificado
+                {% endif %}
+            </p>
+ 
+            <p><strong>Fecha de caducidad:</strong>
+                {{ inventario.fecha_caducidad.strftime('%d/%m/%Y') }}
+            </p>
+ 
+            <p><strong>Estado:</strong>
+                {% if inventario.activo %}
+                    <span class="badge bg-success">Activo</span>
+                {% else %}
+                    <span class="badge bg-secondary">Inactivo</span>
+                {% endif %}
+            </p>
+        </div>
+ 
+        <div class="card-footer d-flex justify-content-between">
+            <a href="/inventario" class="btn btn-secondary">
+                Volver
+            </a>
+ 
+            <div>
+                <a href="/inventario/{{ inventario.id }}/edit" class="btn btn-warning">
+                    Editar
+                </a>
+ 
+                <form method="post"
+                      action="/inventario/{{ inventario.id }}/delete"
+                      class="d-inline">
+                    <button class="btn btn-danger">
+                        Eliminar
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+ 

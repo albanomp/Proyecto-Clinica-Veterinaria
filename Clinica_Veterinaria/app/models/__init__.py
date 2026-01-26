@@ -3,7 +3,8 @@ from app.models.duenyo import Duenyo
 from app.models.tratamiento import Tratamiento
 from app.models.veterinario import Veterinario
 from app.models.cita import Cita
+from app.models.inventario import Inventario
 
-__all__= ["Mascota","Veterinario","Duenyo","Tratamiento", "Cita"]
+__all__= ["Mascota","Veterinario","Duenyo","Tratamiento", "Cita", "Inventario"]
 
 

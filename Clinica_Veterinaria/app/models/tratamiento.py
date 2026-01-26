@@ -20,4 +20,10 @@ class Tratamiento(Base):
     mascota_id: Mapped[int] = mapped_column(ForeignKey("mascotas.id", ondelete="Cascade"), nullable=False)
     mascota: Mapped["Mascota"] = relationship(back_populates="tratamientos")
     
+    inventarios = relationship(
+        "Inventario",
+        secondary="tratamiento_inventario",
+        back_populates="tratamientos"
+    )
+    
     

@@ -3,6 +3,8 @@ from app.routers.api import duenyos
 from app.routers.api import mascotas
 from app.routers.api import tratamientos
 from app.routers.api import veterinarios
+from app.routers.api import inventario
+from app.routers.api import inventario_tratamiento
 
 router = APIRouter()
 
@@ -10,3 +12,5 @@ router.include_router(mascotas.router)
 router.include_router(duenyos.router)
 router.include_router(tratamientos.router)
 router.include_router(veterinarios.router)
+router.include_router(inventario.router)
+router.include_router(inventario_tratamiento.router)
